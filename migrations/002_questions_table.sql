@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     text VARCHAR(500) NOT NULL,
     text_hash CHAR(32) UNIQUE NOT NULL,
+    category_id SMALLINT NOT NULL REFERENCES categories(id),
     type type_enum NOT NULL DEFAULT 'singe' CHECK ( type IN ('singe', 'multi', 'betting')),
     source source_enum NOT NULL DEFAULT 'text' CHECK ( source IN ('text', 'image', 'audio', 'animation', 'video')),
     difficulty difficulty_type NOT NULL DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'very hard')),
@@ -21,11 +22,13 @@ CREATE INDEX IF NOT EXISTS idx_questions_source ON questions(source);
 CREATE INDEX IF NOT EXISTS idx_questions_difficulty ON questions(difficulty);
 CREATE INDEX IF NOT EXISTS idx_questions_language ON questions(language);
 CREATE INDEX IF NOT EXISTS idx_questions_created_at ON questions(created_at);
+CREATE INDEX IF NOT EXISTS idx_questions_category_id ON questions(category_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_questions_hash ON questions(text_hash);
 
 ---- create above / drop below ----
 
 DROP INDEX IF EXISTS idx_unique_questions_hash;
+DROP INDEX IF EXISTS idx_questions_category_id;
 DROP INDEX IF EXISTS idx_questions_created_at;
 DROP INDEX IF EXISTS idx_questions_language;
 DROP INDEX IF EXISTS idx_questions_difficulty;
