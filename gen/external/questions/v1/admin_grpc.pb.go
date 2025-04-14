@@ -20,20 +20,26 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	QuestionsAdminService_CreateQuestion_FullMethodName = "/questions.v1.QuestionsAdminService/CreateQuestion"
-	QuestionsAdminService_UpdateQuestion_FullMethodName = "/questions.v1.QuestionsAdminService/UpdateQuestion"
-	QuestionsAdminService_DeleteQuestion_FullMethodName = "/questions.v1.QuestionsAdminService/DeleteQuestion"
-	QuestionsAdminService_GetQuestions_FullMethodName   = "/questions.v1.QuestionsAdminService/GetQuestions"
+	QuestionsAdminService_GetQuestions_FullMethodName         = "/questions.v1.QuestionsAdminService/GetQuestions"
+	QuestionsAdminService_CreateQuestion_FullMethodName       = "/questions.v1.QuestionsAdminService/CreateQuestion"
+	QuestionsAdminService_UpdateCategory_FullMethodName       = "/questions.v1.QuestionsAdminService/UpdateCategory"
+	QuestionsAdminService_UpdateQuestion_FullMethodName       = "/questions.v1.QuestionsAdminService/UpdateQuestion"
+	QuestionsAdminService_UpdateQuestionOption_FullMethodName = "/questions.v1.QuestionsAdminService/UpdateQuestionOption"
+	QuestionsAdminService_DeleteQuestion_FullMethodName       = "/questions.v1.QuestionsAdminService/DeleteQuestion"
+	QuestionsAdminService_DeleteQuestionOption_FullMethodName = "/questions.v1.QuestionsAdminService/DeleteQuestionOption"
 )
 
 // QuestionsAdminServiceClient is the client API for QuestionsAdminService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuestionsAdminServiceClient interface {
-	CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	UpdateQuestion(ctx context.Context, in *UpdateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error)
+	CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateQuestion(ctx context.Context, in *UpdateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateQuestionOption(ctx context.Context, in *UpdateQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteQuestionOption(ctx context.Context, in *DeleteQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type questionsAdminServiceClient struct {
@@ -44,10 +50,30 @@ func NewQuestionsAdminServiceClient(cc grpc.ClientConnInterface) QuestionsAdminS
 	return &questionsAdminServiceClient{cc}
 }
 
+func (c *questionsAdminServiceClient) GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetQuestionsResponse)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_GetQuestions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *questionsAdminServiceClient) CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, QuestionsAdminService_CreateQuestion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *questionsAdminServiceClient) UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_UpdateCategory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,6 +90,16 @@ func (c *questionsAdminServiceClient) UpdateQuestion(ctx context.Context, in *Up
 	return out, nil
 }
 
+func (c *questionsAdminServiceClient) UpdateQuestionOption(ctx context.Context, in *UpdateQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_UpdateQuestionOption_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *questionsAdminServiceClient) DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -74,10 +110,10 @@ func (c *questionsAdminServiceClient) DeleteQuestion(ctx context.Context, in *De
 	return out, nil
 }
 
-func (c *questionsAdminServiceClient) GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error) {
+func (c *questionsAdminServiceClient) DeleteQuestionOption(ctx context.Context, in *DeleteQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetQuestionsResponse)
-	err := c.cc.Invoke(ctx, QuestionsAdminService_GetQuestions_FullMethodName, in, out, cOpts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_DeleteQuestionOption_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +124,13 @@ func (c *questionsAdminServiceClient) GetQuestions(ctx context.Context, in *GetQ
 // All implementations should embed UnimplementedQuestionsAdminServiceServer
 // for forward compatibility.
 type QuestionsAdminServiceServer interface {
-	CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error)
-	UpdateQuestion(context.Context, *UpdateQuestionRequest) (*emptypb.Empty, error)
-	DeleteQuestion(context.Context, *DeleteQuestionRequest) (*emptypb.Empty, error)
 	GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error)
+	CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error)
+	UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error)
+	UpdateQuestion(context.Context, *UpdateQuestionRequest) (*emptypb.Empty, error)
+	UpdateQuestionOption(context.Context, *UpdateQuestionOptionRequest) (*emptypb.Empty, error)
+	DeleteQuestion(context.Context, *DeleteQuestionRequest) (*emptypb.Empty, error)
+	DeleteQuestionOption(context.Context, *DeleteQuestionOptionRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedQuestionsAdminServiceServer should be embedded to have
@@ -101,17 +140,26 @@ type QuestionsAdminServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQuestionsAdminServiceServer struct{}
 
+func (UnimplementedQuestionsAdminServiceServer) GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestions not implemented")
+}
 func (UnimplementedQuestionsAdminServiceServer) CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestion not implemented")
+}
+func (UnimplementedQuestionsAdminServiceServer) UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCategory not implemented")
 }
 func (UnimplementedQuestionsAdminServiceServer) UpdateQuestion(context.Context, *UpdateQuestionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestion not implemented")
 }
+func (UnimplementedQuestionsAdminServiceServer) UpdateQuestionOption(context.Context, *UpdateQuestionOptionRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestionOption not implemented")
+}
 func (UnimplementedQuestionsAdminServiceServer) DeleteQuestion(context.Context, *DeleteQuestionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestion not implemented")
 }
-func (UnimplementedQuestionsAdminServiceServer) GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetQuestions not implemented")
+func (UnimplementedQuestionsAdminServiceServer) DeleteQuestionOption(context.Context, *DeleteQuestionOptionRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestionOption not implemented")
 }
 func (UnimplementedQuestionsAdminServiceServer) testEmbeddedByValue() {}
 
@@ -133,6 +181,24 @@ func RegisterQuestionsAdminServiceServer(s grpc.ServiceRegistrar, srv QuestionsA
 	s.RegisterService(&QuestionsAdminService_ServiceDesc, srv)
 }
 
+func _QuestionsAdminService_GetQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQuestionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsAdminServiceServer).GetQuestions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsAdminService_GetQuestions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsAdminServiceServer).GetQuestions(ctx, req.(*GetQuestionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QuestionsAdminService_CreateQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateQuestionRequest)
 	if err := dec(in); err != nil {
@@ -147,6 +213,24 @@ func _QuestionsAdminService_CreateQuestion_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QuestionsAdminServiceServer).CreateQuestion(ctx, req.(*CreateQuestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QuestionsAdminService_UpdateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsAdminServiceServer).UpdateCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsAdminService_UpdateCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsAdminServiceServer).UpdateCategory(ctx, req.(*UpdateCategoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -169,6 +253,24 @@ func _QuestionsAdminService_UpdateQuestion_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QuestionsAdminService_UpdateQuestionOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQuestionOptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsAdminServiceServer).UpdateQuestionOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsAdminService_UpdateQuestionOption_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsAdminServiceServer).UpdateQuestionOption(ctx, req.(*UpdateQuestionOptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QuestionsAdminService_DeleteQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteQuestionRequest)
 	if err := dec(in); err != nil {
@@ -187,20 +289,20 @@ func _QuestionsAdminService_DeleteQuestion_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
-func _QuestionsAdminService_GetQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetQuestionsRequest)
+func _QuestionsAdminService_DeleteQuestionOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteQuestionOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QuestionsAdminServiceServer).GetQuestions(ctx, in)
+		return srv.(QuestionsAdminServiceServer).DeleteQuestionOption(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: QuestionsAdminService_GetQuestions_FullMethodName,
+		FullMethod: QuestionsAdminService_DeleteQuestionOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionsAdminServiceServer).GetQuestions(ctx, req.(*GetQuestionsRequest))
+		return srv.(QuestionsAdminServiceServer).DeleteQuestionOption(ctx, req.(*DeleteQuestionOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -213,20 +315,32 @@ var QuestionsAdminService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QuestionsAdminServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "GetQuestions",
+			Handler:    _QuestionsAdminService_GetQuestions_Handler,
+		},
+		{
 			MethodName: "CreateQuestion",
 			Handler:    _QuestionsAdminService_CreateQuestion_Handler,
+		},
+		{
+			MethodName: "UpdateCategory",
+			Handler:    _QuestionsAdminService_UpdateCategory_Handler,
 		},
 		{
 			MethodName: "UpdateQuestion",
 			Handler:    _QuestionsAdminService_UpdateQuestion_Handler,
 		},
 		{
+			MethodName: "UpdateQuestionOption",
+			Handler:    _QuestionsAdminService_UpdateQuestionOption_Handler,
+		},
+		{
 			MethodName: "DeleteQuestion",
 			Handler:    _QuestionsAdminService_DeleteQuestion_Handler,
 		},
 		{
-			MethodName: "GetQuestions",
-			Handler:    _QuestionsAdminService_GetQuestions_Handler,
+			MethodName: "DeleteQuestionOption",
+			Handler:    _QuestionsAdminService_DeleteQuestionOption_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

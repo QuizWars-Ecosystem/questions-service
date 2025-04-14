@@ -35,6 +35,30 @@ var (
 	_ = metadata.Join
 )
 
+func request_QuestionsAdminService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GetQuestionsRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GetQuestions(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_QuestionsAdminService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GetQuestionsRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GetQuestions(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 func request_QuestionsAdminService_CreateQuestion_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateQuestionRequest
@@ -56,6 +80,30 @@ func local_request_QuestionsAdminService_CreateQuestion_0(ctx context.Context, m
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.CreateQuestion(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_QuestionsAdminService_UpdateCategory_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq UpdateCategoryRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.UpdateCategory(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_QuestionsAdminService_UpdateCategory_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq UpdateCategoryRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.UpdateCategory(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -83,6 +131,30 @@ func local_request_QuestionsAdminService_UpdateQuestion_0(ctx context.Context, m
 	return msg, metadata, err
 }
 
+func request_QuestionsAdminService_UpdateQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq UpdateQuestionOptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.UpdateQuestionOption(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_QuestionsAdminService_UpdateQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq UpdateQuestionOptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.UpdateQuestionOption(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 func request_QuestionsAdminService_DeleteQuestion_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteQuestionRequest
@@ -107,27 +179,27 @@ func local_request_QuestionsAdminService_DeleteQuestion_0(ctx context.Context, m
 	return msg, metadata, err
 }
 
-func request_QuestionsAdminService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_QuestionsAdminService_DeleteQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq GetQuestionsRequest
+		protoReq DeleteQuestionOptionRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := client.GetQuestions(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DeleteQuestionOption(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_QuestionsAdminService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_QuestionsAdminService_DeleteQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq GetQuestionsRequest
+		protoReq DeleteQuestionOptionRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.GetQuestions(ctx, &protoReq)
+	msg, err := server.DeleteQuestionOption(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -137,6 +209,26 @@ func local_request_QuestionsAdminService_GetQuestions_0(ctx context.Context, mar
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterQuestionsAdminServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterQuestionsAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server QuestionsAdminServiceServer) error {
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/GetQuestions"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_QuestionsAdminService_GetQuestions_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_CreateQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -156,6 +248,26 @@ func RegisterQuestionsAdminServiceHandlerServer(ctx context.Context, mux *runtim
 			return
 		}
 		forward_QuestionsAdminService_CreateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/UpdateCategory", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/UpdateCategory"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_QuestionsAdminService_UpdateCategory_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_UpdateCategory_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -177,6 +289,26 @@ func RegisterQuestionsAdminServiceHandlerServer(ctx context.Context, mux *runtim
 		}
 		forward_QuestionsAdminService_UpdateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/UpdateQuestionOption", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/UpdateQuestionOption"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_QuestionsAdminService_UpdateQuestionOption_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_UpdateQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_DeleteQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -197,25 +329,25 @@ func RegisterQuestionsAdminServiceHandlerServer(ctx context.Context, mux *runtim
 		}
 		forward_QuestionsAdminService_DeleteQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_DeleteQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/GetQuestions"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/DeleteQuestionOption", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/DeleteQuestionOption"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_QuestionsAdminService_GetQuestions_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_QuestionsAdminService_DeleteQuestionOption_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_QuestionsAdminService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_QuestionsAdminService_DeleteQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
@@ -257,6 +389,23 @@ func RegisterQuestionsAdminServiceHandler(ctx context.Context, mux *runtime.Serv
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "QuestionsAdminServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterQuestionsAdminServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client QuestionsAdminServiceClient) error {
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/GetQuestions"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_QuestionsAdminService_GetQuestions_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_CreateQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -273,6 +422,23 @@ func RegisterQuestionsAdminServiceHandlerClient(ctx context.Context, mux *runtim
 			return
 		}
 		forward_QuestionsAdminService_CreateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/UpdateCategory", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/UpdateCategory"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_QuestionsAdminService_UpdateCategory_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_UpdateCategory_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -291,6 +457,23 @@ func RegisterQuestionsAdminServiceHandlerClient(ctx context.Context, mux *runtim
 		}
 		forward_QuestionsAdminService_UpdateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/UpdateQuestionOption", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/UpdateQuestionOption"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_QuestionsAdminService_UpdateQuestionOption_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_UpdateQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_DeleteQuestion_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -308,36 +491,42 @@ func RegisterQuestionsAdminServiceHandlerClient(ctx context.Context, mux *runtim
 		}
 		forward_QuestionsAdminService_DeleteQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_DeleteQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/GetQuestions"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsAdminService/DeleteQuestionOption", runtime.WithHTTPPathPattern("/questions.v1.QuestionsAdminService/DeleteQuestionOption"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_QuestionsAdminService_GetQuestions_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_QuestionsAdminService_DeleteQuestionOption_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_QuestionsAdminService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_QuestionsAdminService_DeleteQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_QuestionsAdminService_CreateQuestion_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "CreateQuestion"}, ""))
-	pattern_QuestionsAdminService_UpdateQuestion_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "UpdateQuestion"}, ""))
-	pattern_QuestionsAdminService_DeleteQuestion_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "DeleteQuestion"}, ""))
-	pattern_QuestionsAdminService_GetQuestions_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "GetQuestions"}, ""))
+	pattern_QuestionsAdminService_GetQuestions_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "GetQuestions"}, ""))
+	pattern_QuestionsAdminService_CreateQuestion_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "CreateQuestion"}, ""))
+	pattern_QuestionsAdminService_UpdateCategory_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "UpdateCategory"}, ""))
+	pattern_QuestionsAdminService_UpdateQuestion_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "UpdateQuestion"}, ""))
+	pattern_QuestionsAdminService_UpdateQuestionOption_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "UpdateQuestionOption"}, ""))
+	pattern_QuestionsAdminService_DeleteQuestion_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "DeleteQuestion"}, ""))
+	pattern_QuestionsAdminService_DeleteQuestionOption_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsAdminService", "DeleteQuestionOption"}, ""))
 )
 
 var (
-	forward_QuestionsAdminService_CreateQuestion_0 = runtime.ForwardResponseMessage
-	forward_QuestionsAdminService_UpdateQuestion_0 = runtime.ForwardResponseMessage
-	forward_QuestionsAdminService_DeleteQuestion_0 = runtime.ForwardResponseMessage
-	forward_QuestionsAdminService_GetQuestions_0   = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_GetQuestions_0         = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_CreateQuestion_0       = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_UpdateCategory_0       = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_UpdateQuestion_0       = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_UpdateQuestionOption_0 = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_DeleteQuestion_0       = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_DeleteQuestionOption_0 = runtime.ForwardResponseMessage
 )

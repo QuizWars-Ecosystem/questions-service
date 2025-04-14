@@ -15,12 +15,16 @@ type Question struct {
 	Type       Type
 	Source     Source
 	Difficulty Difficulty
-	Categories []*Category
+	Category   Category
 	Text       string
-	Hash       string
-	Answers    []*Option
+	Options    []*Option
 	Language   string
 	CreatedAt  time.Time
+}
+
+type Hashed struct {
+	Question
+	Hash string
 }
 
 type Option struct {
@@ -31,7 +35,7 @@ type Option struct {
 
 type Meta struct {
 	ID         uuid.UUID  `json:"id"`
-	Categories []int32    `json:"categories"`
+	CategoryID int32      `json:"category_id"`
 	Difficulty Difficulty `json:"difficulty"`
 	Language   string     `json:"language"`
 }
