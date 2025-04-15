@@ -10,6 +10,16 @@ import (
 )
 
 type IStore interface {
+	GetQuestions(ctx context.Context, language string, difficulty questions.Difficulty, categoryID, amount int32) ([]*questions.Question, error)
+	GetQuestionsBatch(ctx context.Context, filter *filter.QuestionsFilter) ([]*questions.Question, error)
+	GetCategories(ctx context.Context) ([]*questions.Category, error)
+	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
+	SaveQuestion(ctx context.Context, question *questions.Hashed) error
+	UpdateCategory(ctx context.Context, id int32, name string) error
+	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error
+	UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error
+	DeleteQuestion(ctx context.Context, id uuid.UUID) error
+	DeleteQuestionOption(ctx context.Context, id uuid.UUID) error
 }
 
 type IDatabase interface {
