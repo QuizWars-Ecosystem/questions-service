@@ -7,24 +7,10 @@ import (
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/filter"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
+	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 )
 
-type Questions struct {
-	db     *pgxpool.Pool
-	logger *zap.Logger
-}
-
-func NewQuestions(db *pgxpool.Pool, logger *zap.Logger) *Questions {
-	return &Questions{
-		db:     db,
-		logger: logger,
-	}
-}
-
-func (q *Questions) GetRandomQuestionMeta(ctx context.Context, amount int64) ([]*questions.Meta, error) {
+func (db *Database) GetRandomQuestionMeta(ctx context.Context, amount int64) ([]*questions.Meta, error) {
 	builder := dbx.StatementBuilder.
 		Select("q.id", "q.language", "q.difficulty", "q.category_id").
 		From("questions q").
@@ -37,7 +23,7 @@ func (q *Questions) GetRandomQuestionMeta(ctx context.Context, amount int64) ([]
 		return nil, apperrors.Internal(err)
 	}
 
-	rows, err := q.db.Query(ctx, query, args...)
+	rows, err := db.pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}
@@ -63,10 +49,10 @@ func (q *Questions) GetRandomQuestionMeta(ctx context.Context, amount int64) ([]
 	return metas, nil
 }
 
-func (q *Questions) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*questions.Question, error) {
+func (db *Database) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*questions.Question, error) {
 	builder := squirrel.StatementBuilder.
 		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
-		From("qs q").
+		From("questions q").
 		Join("categories c ON c.id = q.category_id").
 		LeftJoin("options o ON o.question_id = q.id").
 		Where(squirrel.Eq{"q.id": IDs}).
@@ -77,7 +63,7 @@ func (q *Questions) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*
 		return nil, apperrors.Internal(err)
 	}
 
-	rows, err := q.db.Query(ctx, query, args...)
+	rows, err := db.pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}
@@ -128,16 +114,17 @@ func (q *Questions) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*
 	return qs, nil
 }
 
-func (q *Questions) GetFilteredRandomQuestions(ctx context.Context, filter *filter.QuestionsFilter) ([]*questions.Question, error) {
+func (db *Database) GetFilteredRandomQuestions(ctx context.Context, filter *filter.QuestionsFilter) ([]*questions.Question, error) {
 	cteBuilder := dbx.StatementBuilder.
 		Select("q.id").
 		From("questions q").
 		Where(squirrel.And{
 			squirrel.Eq{"q.type": filter.Types},
 			squirrel.Eq{"q.source": filter.Sources},
-			squirrel.Eq{"q.language": filter.Languages},
+			squirrel.Eq{"q.language": filter.Language},
 			squirrel.Eq{"q.category_id": filter.Categories},
 			squirrel.Eq{"q.difficulty": filter.Difficulties},
+			squirrel.Eq{"q.language": filter.Language},
 		}).
 		OrderBy("RANDOM()").
 		Limit(uint64(filter.Amount))
@@ -159,7 +146,7 @@ func (q *Questions) GetFilteredRandomQuestions(ctx context.Context, filter *filt
 		return nil, apperrors.Internal(err)
 	}
 
-	rows, err := q.db.Query(ctx, query, append(cteArgs, args...)...)
+	rows, err := db.pool.Query(ctx, query, append(cteArgs, args...)...)
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}

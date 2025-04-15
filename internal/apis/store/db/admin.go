@@ -2,35 +2,16 @@ package db
 
 import (
 	"context"
-	"errors"
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
-	"github.com/google/uuid"
+	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
 )
 
-var (
-	argumentsNotProvidedErr = errors.New("arguments not provided")
-)
-
-type Admin struct {
-	db     *pgxpool.Pool
-	logger *zap.Logger
-}
-
-func NewAdmin(db *pgxpool.Pool, logger *zap.Logger) *Admin {
-	return &Admin{
-		db:     db,
-		logger: logger,
-	}
-}
-
-func (a *Admin) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
+func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
 	builder := squirrel.StatementBuilder.
 		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
 		From("qs q").
@@ -78,7 +59,7 @@ func (a *Admin) GetFilteredQuestions(ctx context.Context, filter *admin.Question
 		return nil, 0, apperrors.Internal(err)
 	}
 
-	br := a.db.SendBatch(ctx, b)
+	br := db.pool.SendBatch(ctx, b)
 	defer func() {
 		_ = br.Close()
 	}()
@@ -139,7 +120,7 @@ func (a *Admin) GetFilteredQuestions(ctx context.Context, filter *admin.Question
 	return qs, total, nil
 }
 
-func (a *Admin) SaveQuestion(ctx context.Context, question *questions.Hashed) error {
+func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed) error {
 	builder := dbx.StatementBuilder.
 		Insert("questions").
 		Columns("id", "text", "text_hash", "category_id", "type", "source", "difficulty", "language", "created_at").
@@ -151,7 +132,7 @@ func (a *Admin) SaveQuestion(ctx context.Context, question *questions.Hashed) er
 		return apperrors.Internal(err)
 	}
 
-	_, err = a.db.Exec(ctx, query, args...)
+	_, err = db.pool.Exec(ctx, query, args...)
 	switch {
 	case dbx.IsForeignKeyViolation(err, "category_id"):
 		return apperrors.BadRequestHidden(err, "specified category was not found")
@@ -170,7 +151,7 @@ func (a *Admin) SaveQuestion(ctx context.Context, question *questions.Hashed) er
 	return nil
 }
 
-func (a *Admin) UpdateCategory(ctx context.Context, id int32, name string) error {
+func (db *Database) UpdateCategory(ctx context.Context, id int32, name string) error {
 	builder := dbx.StatementBuilder.
 		Update("categories").
 		Set("name", name).
@@ -181,7 +162,7 @@ func (a *Admin) UpdateCategory(ctx context.Context, id int32, name string) error
 		return apperrors.Internal(err)
 	}
 
-	cmd, err := a.db.Exec(ctx, query, args...)
+	cmd, err := db.pool.Exec(ctx, query, args...)
 	switch {
 	case err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("category", "id", id)
@@ -192,7 +173,7 @@ func (a *Admin) UpdateCategory(ctx context.Context, id int32, name string) error
 	return nil
 }
 
-func (a *Admin) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error {
+func (db *Database) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error {
 	builder := dbx.StatementBuilder.
 		Update("questions").
 		Where(squirrel.Eq{"id": id})
@@ -240,7 +221,7 @@ func (a *Admin) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.Upd
 		return apperrors.Internal(err)
 	}
 
-	cmd, err := a.db.Exec(ctx, query, args...)
+	cmd, err := db.pool.Exec(ctx, query, args...)
 	switch {
 	case err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("question", "id", id)
@@ -261,7 +242,7 @@ func (a *Admin) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.Upd
 	return nil
 }
 
-func (a *Admin) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error {
+func (db *Database) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error {
 	builder := dbx.StatementBuilder.
 		Update("options").
 		Where(squirrel.Eq{"id": id})
@@ -287,7 +268,7 @@ func (a *Admin) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *adm
 		return apperrors.Internal(err)
 	}
 
-	cmd, err := a.db.Exec(ctx, query, args...)
+	cmd, err := db.pool.Exec(ctx, query, args...)
 	switch {
 	case err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("option", "id", id)
@@ -298,7 +279,7 @@ func (a *Admin) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *adm
 	return nil
 }
 
-func (a *Admin) DeleteQuestion(ctx context.Context, id uuid.UUID) error {
+func (db *Database) DeleteQuestion(ctx context.Context, id uuid.UUID) error {
 	builder := dbx.StatementBuilder.
 		Delete("questions").
 		Where(squirrel.Eq{"id": id})
@@ -308,7 +289,7 @@ func (a *Admin) DeleteQuestion(ctx context.Context, id uuid.UUID) error {
 		return apperrors.Internal(err)
 	}
 
-	cmd, err := a.db.Exec(ctx, query, args...)
+	cmd, err := db.pool.Exec(ctx, query, args...)
 
 	switch {
 	case err == nil && cmd.RowsAffected() == 0:
@@ -320,7 +301,7 @@ func (a *Admin) DeleteQuestion(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (a *Admin) DeleteQuestionOption(ctx context.Context, id uuid.UUID) error {
+func (db *Database) DeleteQuestionOption(ctx context.Context, id uuid.UUID) error {
 	builder := dbx.StatementBuilder.
 		Delete("options").
 		Where(squirrel.Eq{"id": id})
@@ -330,7 +311,7 @@ func (a *Admin) DeleteQuestionOption(ctx context.Context, id uuid.UUID) error {
 		return apperrors.Internal(err)
 	}
 
-	cmd, err := a.db.Exec(ctx, query, args...)
+	cmd, err := db.pool.Exec(ctx, query, args...)
 	switch {
 	case err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("option", "id", id)
