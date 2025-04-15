@@ -1,7 +1,7 @@
 package questions
 
 import (
-	"github.com/google/uuid"
+	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 	"time"
 )
 
@@ -31,13 +31,6 @@ type Option struct {
 	ID        uuid.UUID
 	Text      string
 	IsCorrect bool
-}
-
-type Meta struct {
-	ID         uuid.UUID  `json:"id"`
-	CategoryID int32      `json:"category_id"`
-	Difficulty Difficulty `json:"difficulty"`
-	Language   string     `json:"language"`
 }
 
 type Type string

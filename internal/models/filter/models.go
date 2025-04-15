@@ -7,6 +7,6 @@ type QuestionsFilter struct {
 	Sources      []questions.Source
 	Difficulties []questions.Difficulty
 	Categories   []int32
-	Languages    []string
+	Language     string
 	Amount       int32
 }
