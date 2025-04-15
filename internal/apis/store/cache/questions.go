@@ -2,14 +2,15 @@ package cache
 
 import (
 	"context"
+	"time"
+
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
-	"time"
 )
 
 func (c *Cache) GetCachedIDs(ctx context.Context, language, difficulty string, categoryID, amount int32) ([]uuid.UUID, int, error) {
-	var ids = make([]uuid.UUID, amount)
+	ids := make([]uuid.UUID, amount)
 	var count int
 
 	values, err := c.db.SRandMemberN(ctx, key(language, difficulty, categoryID), int64(amount)).Result()
@@ -61,7 +62,7 @@ func (c *Cache) GetBatchCachedIDs(ctx context.Context, language string, difficul
 		}
 	}
 
-	var ids = make([]uuid.UUID, size)
+	ids := make([]uuid.UUID, size)
 	for i, v := range values {
 		if err = ids[i].Scan(v); err != nil {
 			return nil, 0, apperrors.Internal(err)

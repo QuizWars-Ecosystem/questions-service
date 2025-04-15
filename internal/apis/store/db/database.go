@@ -2,13 +2,12 @@ package db
 
 import (
 	"errors"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
 
-var (
-	argumentsNotProvidedErr = errors.New("arguments not provided")
-)
+var argumentsNotProvidedErr = errors.New("arguments not provided")
 
 type Database struct {
 	pool   *pgxpool.Pool

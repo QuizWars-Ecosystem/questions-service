@@ -14,7 +14,7 @@ func key(language, difficulty string, categoryID int32) string {
 }
 
 func keyList(language string, difficulties []string, categoryIDs []int32) []string {
-	var keys = make([]string, len(difficulties)+len(categoryIDs))
+	keys := make([]string, len(difficulties)+len(categoryIDs))
 
 	for i, d := range difficulties {
 		for j, id := range categoryIDs {

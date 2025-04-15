@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/filter"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	"go.uber.org/zap"
@@ -52,7 +53,7 @@ func (s *Store) GetQuestions(ctx context.Context, language string, difficulty qu
 }
 
 func (s *Store) GetQuestionsBatch(ctx context.Context, filter *filter.QuestionsFilter) ([]*questions.Question, error) {
-	var difficulties = make([]string, len(filter.Difficulties))
+	difficulties := make([]string, len(filter.Difficulties))
 	for i, d := range filter.Difficulties {
 		difficulties[i] = d.String()
 	}

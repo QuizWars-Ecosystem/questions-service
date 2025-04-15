@@ -6,9 +6,11 @@ import (
 	"go.uber.org/zap"
 )
 
-var _ questionsv1.QuestionsServiceServer = (*Handler)(nil)
-var _ questionsv1.QuestionsAdminServiceServer = (*Handler)(nil)
-var _ questionsv1.QuestionsClientServiceServer = (*Handler)(nil)
+var (
+	_ questionsv1.QuestionsServiceServer       = (*Handler)(nil)
+	_ questionsv1.QuestionsAdminServiceServer  = (*Handler)(nil)
+	_ questionsv1.QuestionsClientServiceServer = (*Handler)(nil)
+)
 
 type Handler struct {
 	service *service.Service

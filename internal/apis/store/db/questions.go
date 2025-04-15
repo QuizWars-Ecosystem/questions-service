@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
@@ -70,8 +71,8 @@ func (db *Database) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*
 
 	defer rows.Close()
 
-	var questionsMap = make(map[uuid.UUID]*questions.Question, len(IDs))
-	var optionsMap = make(map[uuid.UUID][]*questions.Option, len(IDs)*4)
+	questionsMap := make(map[uuid.UUID]*questions.Question, len(IDs))
+	optionsMap := make(map[uuid.UUID][]*questions.Option, len(IDs)*4)
 
 	for rows.Next() {
 		var question questions.Question
@@ -101,7 +102,7 @@ func (db *Database) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*
 		optionsMap[question.ID] = append(optionsMap[question.ID], &option)
 	}
 
-	var qs = make([]*questions.Question, 0, len(questionsMap))
+	qs := make([]*questions.Question, 0, len(questionsMap))
 	for questionID, question := range questionsMap {
 		question.Options = optionsMap[questionID]
 		qs = append(qs, question)
@@ -153,8 +154,8 @@ func (db *Database) GetFilteredRandomQuestions(ctx context.Context, filter *filt
 
 	defer rows.Close()
 
-	var questionsMap = make(map[uuid.UUID]*questions.Question, filter.Amount)
-	var optionsMap = make(map[uuid.UUID][]*questions.Option, filter.Amount*4)
+	questionsMap := make(map[uuid.UUID]*questions.Question, filter.Amount)
+	optionsMap := make(map[uuid.UUID][]*questions.Option, filter.Amount*4)
 
 	for rows.Next() {
 		var question questions.Question
@@ -184,7 +185,7 @@ func (db *Database) GetFilteredRandomQuestions(ctx context.Context, filter *filt
 		optionsMap[question.ID] = append(optionsMap[question.ID], &option)
 	}
 
-	var qs = make([]*questions.Question, 0, len(questionsMap))
+	qs := make([]*questions.Question, 0, len(questionsMap))
 	for questionID, question := range questionsMap {
 		question.Options = optionsMap[questionID]
 		qs = append(qs, question)

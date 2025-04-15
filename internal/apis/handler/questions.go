@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 )
 

@@ -1,8 +1,9 @@
 package questions
 
 import (
-	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 	"time"
+
+	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 )
 
 type Category struct {

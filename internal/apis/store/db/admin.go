@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
@@ -71,8 +72,8 @@ func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.Ques
 
 	defer rows.Close()
 
-	var questionsMap = make(map[uuid.UUID]*questions.Question, filter.Limit)
-	var optionsMap = make(map[uuid.UUID][]*questions.Option, filter.Limit*4)
+	questionsMap := make(map[uuid.UUID]*questions.Question, filter.Limit)
+	optionsMap := make(map[uuid.UUID][]*questions.Option, filter.Limit*4)
 
 	for rows.Next() {
 		var question questions.Question
@@ -102,7 +103,7 @@ func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.Ques
 		optionsMap[question.ID] = append(optionsMap[question.ID], &option)
 	}
 
-	var qs = make([]*questions.Question, 0, len(questionsMap))
+	qs := make([]*questions.Question, 0, len(questionsMap))
 	for questionID, question := range questionsMap {
 		question.Options = optionsMap[questionID]
 		qs = append(qs, question)
