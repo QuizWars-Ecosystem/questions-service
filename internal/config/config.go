@@ -1,11 +1,15 @@
 package config
 
-import "github.com/QuizWars-Ecosystem/go-common/pkg/config"
+import (
+	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
+	"time"
+)
 
 type Config struct {
 	config.DefaultServiceConfig
-	Postgres PostgresConfig `envPrefix:"POSTGRES_"`
-	Redis    RedisConfig    `envPrefix:"REDIS_"`
+	Postgres    PostgresConfig `envPrefix:"POSTGRES_"`
+	Redis       RedisConfig    `envPrefix:"REDIS_"`
+	StoreConfig StoreConfig    `envPrefix:"STORE_"`
 }
 
 type PostgresConfig struct {
@@ -14,4 +18,10 @@ type PostgresConfig struct {
 
 type RedisConfig struct {
 	URL string `env:"URL"`
+}
+
+type StoreConfig struct {
+	WarmUp        bool          `env:"WARM_UP"`
+	WarmUpAmount  int           `env:"WARM_UP_AMOUNT"`
+	WarmUpTimeout time.Duration `env:"WARM_UP_TIMEOUT"`
 }
