@@ -17,6 +17,11 @@ const (
 	CreatedAt  Order = "created_at"
 )
 
+const (
+	ASC  Sort = "ASC"
+	DESC Sort = "DESC"
+)
+
 type UpdateQuestionRequest struct {
 	Type       *questions.Type
 	Difficulty *questions.Difficulty
@@ -31,11 +36,6 @@ type UpdateQuestionOptionRequest struct {
 	Text      *string
 	IsCorrect *bool
 }
-
-const (
-	ASC  Sort = "ASC"
-	DESC Sort = "DESC"
-)
 
 type Filter[T any] struct {
 	From T
