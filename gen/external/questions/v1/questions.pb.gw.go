@@ -35,6 +35,30 @@ var (
 	_ = metadata.Join
 )
 
+func request_QuestionsService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GetQuestionsRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GetQuestions(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_QuestionsService_GetQuestions_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GetQuestionsRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GetQuestions(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 func request_QuestionsService_GetQuestionBatch_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetQuestionBatchRequest
@@ -65,6 +89,26 @@ func local_request_QuestionsService_GetQuestionBatch_0(ctx context.Context, mars
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterQuestionsServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterQuestionsServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server QuestionsServiceServer) error {
+	mux.Handle(http.MethodPost, pattern_QuestionsService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questions.v1.QuestionsService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsService/GetQuestions"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_QuestionsService_GetQuestions_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsService_GetQuestionBatch_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -125,6 +169,23 @@ func RegisterQuestionsServiceHandler(ctx context.Context, mux *runtime.ServeMux,
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "QuestionsServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterQuestionsServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client QuestionsServiceClient) error {
+	mux.Handle(http.MethodPost, pattern_QuestionsService_GetQuestions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questions.v1.QuestionsService/GetQuestions", runtime.WithHTTPPathPattern("/questions.v1.QuestionsService/GetQuestions"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_QuestionsService_GetQuestions_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsService_GetQuestions_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsService_GetQuestionBatch_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -146,9 +207,11 @@ func RegisterQuestionsServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 }
 
 var (
+	pattern_QuestionsService_GetQuestions_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsService", "GetQuestions"}, ""))
 	pattern_QuestionsService_GetQuestionBatch_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questions.v1.QuestionsService", "GetQuestionBatch"}, ""))
 )
 
 var (
+	forward_QuestionsService_GetQuestions_0     = runtime.ForwardResponseMessage
 	forward_QuestionsService_GetQuestionBatch_0 = runtime.ForwardResponseMessage
 )

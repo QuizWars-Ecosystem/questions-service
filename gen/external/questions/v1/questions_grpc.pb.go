@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	QuestionsService_GetQuestions_FullMethodName     = "/questions.v1.QuestionsService/GetQuestions"
 	QuestionsService_GetQuestionBatch_FullMethodName = "/questions.v1.QuestionsService/GetQuestionBatch"
 )
 
@@ -26,7 +27,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuestionsServiceClient interface {
-	GetQuestionBatch(ctx context.Context, in *GetQuestionBatchRequest, opts ...grpc.CallOption) (*GetQuestionsBatchResponse, error)
+	GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*QuestionsResponse, error)
+	GetQuestionBatch(ctx context.Context, in *GetQuestionBatchRequest, opts ...grpc.CallOption) (*QuestionsResponse, error)
 }
 
 type questionsServiceClient struct {
@@ -37,9 +39,19 @@ func NewQuestionsServiceClient(cc grpc.ClientConnInterface) QuestionsServiceClie
 	return &questionsServiceClient{cc}
 }
 
-func (c *questionsServiceClient) GetQuestionBatch(ctx context.Context, in *GetQuestionBatchRequest, opts ...grpc.CallOption) (*GetQuestionsBatchResponse, error) {
+func (c *questionsServiceClient) GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*QuestionsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetQuestionsBatchResponse)
+	out := new(QuestionsResponse)
+	err := c.cc.Invoke(ctx, QuestionsService_GetQuestions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *questionsServiceClient) GetQuestionBatch(ctx context.Context, in *GetQuestionBatchRequest, opts ...grpc.CallOption) (*QuestionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QuestionsResponse)
 	err := c.cc.Invoke(ctx, QuestionsService_GetQuestionBatch_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +63,8 @@ func (c *questionsServiceClient) GetQuestionBatch(ctx context.Context, in *GetQu
 // All implementations should embed UnimplementedQuestionsServiceServer
 // for forward compatibility.
 type QuestionsServiceServer interface {
-	GetQuestionBatch(context.Context, *GetQuestionBatchRequest) (*GetQuestionsBatchResponse, error)
+	GetQuestions(context.Context, *GetQuestionsRequest) (*QuestionsResponse, error)
+	GetQuestionBatch(context.Context, *GetQuestionBatchRequest) (*QuestionsResponse, error)
 }
 
 // UnimplementedQuestionsServiceServer should be embedded to have
@@ -61,7 +74,10 @@ type QuestionsServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQuestionsServiceServer struct{}
 
-func (UnimplementedQuestionsServiceServer) GetQuestionBatch(context.Context, *GetQuestionBatchRequest) (*GetQuestionsBatchResponse, error) {
+func (UnimplementedQuestionsServiceServer) GetQuestions(context.Context, *GetQuestionsRequest) (*QuestionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestions not implemented")
+}
+func (UnimplementedQuestionsServiceServer) GetQuestionBatch(context.Context, *GetQuestionBatchRequest) (*QuestionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionBatch not implemented")
 }
 func (UnimplementedQuestionsServiceServer) testEmbeddedByValue() {}
@@ -82,6 +98,24 @@ func RegisterQuestionsServiceServer(s grpc.ServiceRegistrar, srv QuestionsServic
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&QuestionsService_ServiceDesc, srv)
+}
+
+func _QuestionsService_GetQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQuestionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsServiceServer).GetQuestions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsService_GetQuestions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsServiceServer).GetQuestions(ctx, req.(*GetQuestionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _QuestionsService_GetQuestionBatch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -109,6 +143,10 @@ var QuestionsService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "questions.v1.QuestionsService",
 	HandlerType: (*QuestionsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetQuestions",
+			Handler:    _QuestionsService_GetQuestions_Handler,
+		},
 		{
 			MethodName: "GetQuestionBatch",
 			Handler:    _QuestionsService_GetQuestionBatch_Handler,
