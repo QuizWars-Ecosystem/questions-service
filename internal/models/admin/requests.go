@@ -2,11 +2,12 @@ package admin
 
 import (
 	"crypto/md5"
+	"strings"
+	"time"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
-	"strings"
-	"time"
 )
 
 var _ abstractions.Requestable[QuestionsFilter, *questionsv1.GetFilteredQuestionsRequest] = (*QuestionsFilter)(nil)
@@ -27,7 +28,7 @@ func (q QuestionsFilter) Request(req *questionsv1.GetFilteredQuestionsRequest) (
 	}
 
 	if req.TypeFilter != nil {
-		var array = make([]questions.Type, len(req.TypeFilter.Types))
+		array := make([]questions.Type, len(req.TypeFilter.Types))
 		for i, element := range req.TypeFilter.Types {
 			array[i] = questions.TypeFromGRPCEnum(element)
 		}
@@ -35,7 +36,7 @@ func (q QuestionsFilter) Request(req *questionsv1.GetFilteredQuestionsRequest) (
 	}
 
 	if req.DifficultyFilter != nil {
-		var array = make([]questions.Difficulty, len(req.DifficultyFilter.Difficulties))
+		array := make([]questions.Difficulty, len(req.DifficultyFilter.Difficulties))
 		for i, element := range req.DifficultyFilter.Difficulties {
 			array[i] = questions.DifficultyFromGRPCEnum(element)
 		}

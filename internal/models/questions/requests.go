@@ -3,12 +3,13 @@ package questions
 import (
 	"crypto/md5"
 	"errors"
+	"strings"
+	"time"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/gofrs/uuid"
-	"strings"
-	"time"
 
 	pgxuuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
 )
@@ -47,7 +48,7 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 		return nil, apperrors.Internal(err)
 	}
 
-	var q = Question{
+	q := Question{
 		ID:         pgxuuid.UUID{UUID: id},
 		Type:       TypeFromGRPCEnum(req.Type),
 		Source:     Text,
@@ -62,9 +63,9 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 		return nil, apperrors.BadRequest(errors.New("question must contain at least one option"))
 	}
 
-	var options = make([]*Option, len(req.Options))
+	options := make([]*Option, len(req.Options))
 	for i, o := range req.Options {
-		var option = &Option{}
+		option := &Option{}
 
 		if option, err = option.Request(o); err != nil {
 			return nil, err

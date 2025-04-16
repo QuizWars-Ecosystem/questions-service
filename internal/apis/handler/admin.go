@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
@@ -29,7 +30,7 @@ func (h *Handler) GetFilteredQuestions(ctx context.Context, request *questionsv1
 		return nil, err
 	}
 
-	var questionsList = make([]*questionsv1.Question, len(qs))
+	questionsList := make([]*questionsv1.Question, len(qs))
 	for i, q := range qs {
 		var question *questionsv1.Question
 

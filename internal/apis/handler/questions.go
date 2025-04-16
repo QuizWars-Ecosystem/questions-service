@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/filter"
@@ -20,7 +21,7 @@ func (h *Handler) GetQuestions(ctx context.Context, request *questionsv1.GetQues
 		return nil, err
 	}
 
-	var questionsList = make([]*questionsv1.Question, len(qs))
+	questionsList := make([]*questionsv1.Question, len(qs))
 	for i, question := range qs {
 		var q *questionsv1.Question
 		if q, err = question.Response(); err != nil {
@@ -46,7 +47,7 @@ func (h *Handler) GetQuestionBatch(ctx context.Context, request *questionsv1.Get
 		return nil, err
 	}
 
-	var questionsList = make([]*questionsv1.Question, len(qs))
+	questionsList := make([]*questionsv1.Question, len(qs))
 	for i, question := range qs {
 		var q *questionsv1.Question
 		if q, err = question.Response(); err != nil {

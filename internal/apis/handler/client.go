@@ -13,7 +13,7 @@ func (h *Handler) GetCategories(ctx context.Context, _ *emptypb.Empty) (*questio
 		return nil, err
 	}
 
-	var categoriesList = make([]*questionsv1.Category, len(categories))
+	categoriesList := make([]*questionsv1.Category, len(categories))
 	for i, category := range categories {
 		var c *questionsv1.Category
 		if c, err = category.Response(); err != nil {

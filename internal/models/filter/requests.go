@@ -9,9 +9,9 @@ import (
 var _ abstractions.Requestable[QuestionsFilter, *questionsv1.GetQuestionBatchRequest] = (*QuestionsFilter)(nil)
 
 func (q QuestionsFilter) Request(req *questionsv1.GetQuestionBatchRequest) (*QuestionsFilter, error) {
-	var types = make([]questions.Type, len(req.Types))
-	var sources = make([]questions.Source, len(req.Sources))
-	var difficulties = make([]questions.Difficulty, len(req.Difficulties))
+	types := make([]questions.Type, len(req.Types))
+	sources := make([]questions.Source, len(req.Sources))
+	difficulties := make([]questions.Difficulty, len(req.Difficulties))
 
 	for i, t := range req.Types {
 		types[i] = questions.TypeFromGRPCEnum(t)

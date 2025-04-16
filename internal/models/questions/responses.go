@@ -35,7 +35,7 @@ func (q *Question) Response() (*questionsv1.Question, error) {
 	req.Language = q.Language
 	req.CreatedAt = timestamppb.New(q.CreatedAt)
 
-	var options = make([]*questionsv1.Option, len(q.Options))
+	options := make([]*questionsv1.Option, len(q.Options))
 	for i, o := range q.Options {
 		var option *questionsv1.Option
 		option, err = o.Response()
