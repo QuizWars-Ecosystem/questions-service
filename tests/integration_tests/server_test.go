@@ -4,6 +4,7 @@ import (
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/server"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
+	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/modules"
 	"testing"
 
 	test "github.com/QuizWars-Ecosystem/go-common/pkg/testing/server"
@@ -27,4 +28,8 @@ func runServer(t *testing.T, cfg *config.TestConfig) {
 	adminClient := questionsv1.NewQuestionsAdminServiceClient(conn)
 	clientClient := questionsv1.NewQuestionsClientServiceClient(conn)
 	questionsClient := questionsv1.NewQuestionsServiceClient(conn)
+
+	modules.AdminServiceTest(t, adminClient, cfg)
+	modules.ClientServiceTest(t, clientClient, cfg)
+	modules.QuestionsServiceTest(t, questionsClient, cfg)
 }

@@ -3,6 +3,7 @@ package integration_tests
 import (
 	"context"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
+	"strings"
 	"testing"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/testing/migrations"
@@ -40,7 +41,7 @@ func prepareInfrastructure(
 	redisUrl, err := redis.ConnectionString(ctx)
 	require.NoError(t, err)
 
-	cfg.ServiceConfig.Redis.URL = redisUrl
+	cfg.ServiceConfig.Redis.URL = strings.TrimPrefix(redisUrl, "redis://")
 
 	runServerFn(t, cfg)
 }

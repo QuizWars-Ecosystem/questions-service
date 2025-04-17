@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
@@ -55,7 +54,7 @@ func (db *Database) GetQuestionsByIDs(ctx context.Context, IDs []uuid.UUID) ([]*
 		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
 		From("questions q").
 		Join("categories c ON c.id = q.category_id").
-		LeftJoin("options o ON o.question_id = q.id").
+		LeftJoin("question_options o ON o.question_id = q.id").
 		Where(squirrel.Eq{"q.id": IDs}).
 		OrderBy("q.id")
 
@@ -122,7 +121,6 @@ func (db *Database) GetFilteredRandomQuestions(ctx context.Context, filter *filt
 		Where(squirrel.And{
 			squirrel.Eq{"q.type": filter.Types},
 			squirrel.Eq{"q.source": filter.Sources},
-			squirrel.Eq{"q.language": filter.Language},
 			squirrel.Eq{"q.category_id": filter.Categories},
 			squirrel.Eq{"q.difficulty": filter.Difficulties},
 			squirrel.Eq{"q.language": filter.Language},
@@ -140,6 +138,7 @@ func (db *Database) GetFilteredRandomQuestions(ctx context.Context, filter *filt
 		From("questions q").
 		Join("random_questions r ON q.id = r.id").
 		Join("categories c ON c.id = q.category_id").
+		Join("question_options o ON o.question_id = q.id").
 		Prefix("WITH random_questions AS (" + cteQuery + ")")
 
 	query, args, err := builder.ToSql()

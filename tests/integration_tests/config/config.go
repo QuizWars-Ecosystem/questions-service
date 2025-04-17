@@ -34,6 +34,11 @@ func NewTestConfig() *TestConfig {
 				AccessExpiration:  time.Hour,
 				RefreshExpiration: time.Hour,
 			},
+			StoreConfig: config.StoreConfig{
+				WarmUp:        true,
+				WarmUpAmount:  100,
+				WarmUpTimeout: time.Minute,
+			},
 		},
 		Postgres: &postgresCfg,
 		Redis:    &redisCfg,

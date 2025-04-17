@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"go.uber.org/zap"
 
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
@@ -11,6 +12,7 @@ import (
 func (s *Store) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
 	qs, amount, err := s.db.GetFilteredQuestions(ctx, filter)
 	if err != nil {
+		s.logger.Error("error.GetFilteredQuestions", zap.Error(err))
 		return nil, amount, err
 	}
 

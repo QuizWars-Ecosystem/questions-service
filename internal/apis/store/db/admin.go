@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
@@ -15,9 +14,9 @@ import (
 func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
 	builder := squirrel.StatementBuilder.
 		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
-		From("qs q").
+		From("questions q").
 		Join("categories c ON c.id = q.category_id").
-		LeftJoin("options o ON o.question_id = q.id").
+		LeftJoin("question_options o ON o.question_id = q.id").
 		OrderBy(filter.Order.String() + " " + filter.Sort.String()).
 		Limit(filter.Limit).
 		Offset(filter.Offset)
@@ -245,7 +244,7 @@ func (db *Database) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin
 
 func (db *Database) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error {
 	builder := dbx.StatementBuilder.
-		Update("options").
+		Update("question_options").
 		Where(squirrel.Eq{"id": id})
 
 	flag := false
@@ -304,7 +303,7 @@ func (db *Database) DeleteQuestion(ctx context.Context, id uuid.UUID) error {
 
 func (db *Database) DeleteQuestionOption(ctx context.Context, id uuid.UUID) error {
 	builder := dbx.StatementBuilder.
-		Delete("options").
+		Delete("question_options").
 		Where(squirrel.Eq{"id": id})
 
 	query, args, err := builder.ToSql()
