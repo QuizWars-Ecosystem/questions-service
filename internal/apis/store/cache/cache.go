@@ -1,15 +1,15 @@
 package cache
 
 import (
-	"github.com/redis/go-redis/v9"
+	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	"go.uber.org/zap"
 )
 
 type Cache struct {
-	db     *redis.ClusterClient
+	db     abstractions.RedisClient
 	logger *zap.Logger
 }
 
-func NewCache(db *redis.ClusterClient, logger *zap.Logger) *Cache {
+func NewCache(db abstractions.RedisClient, logger *zap.Logger) *Cache {
 	return &Cache{db: db, logger: logger}
 }
