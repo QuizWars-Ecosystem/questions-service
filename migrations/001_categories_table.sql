@@ -1,7 +1,7 @@
 -- Write your migrate up statements here
 
 CREATE TABLE IF NOT EXISTS categories (
-    id SMALLSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(32) NOT NULL UNIQUE
 );
 

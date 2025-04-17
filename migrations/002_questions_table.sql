@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     text VARCHAR(500) NOT NULL,
     text_hash CHAR(32) UNIQUE NOT NULL,
-    category_id SMALLINT NOT NULL REFERENCES categories(id),
+    category_id INTEGER NOT NULL REFERENCES categories(id),
     type type_enum NOT NULL DEFAULT 'singe' CHECK ( type IN ('singe', 'multi', 'betting')),
     source source_enum NOT NULL DEFAULT 'text' CHECK ( source IN ('text', 'image', 'audio', 'animation', 'video')),
     difficulty difficulty_type NOT NULL DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'very hard')),
