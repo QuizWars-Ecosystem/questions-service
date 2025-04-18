@@ -149,11 +149,13 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 		Insert("questions").
 		Columns("id", "text", "text_hash", "category_id", "type", "source", "difficulty", "language", "created_at").
 		Values(question.ID, question.Text, question.Hash, question.Category.ID, question.Type, question.Source, question.Difficulty, question.Language, question.CreatedAt).
-		Suffix("ON CONFLICT DO NOTHING")
+		Suffix("ON CONFLICT DO NOTHING").
+		Suffix("RETURNING id")
 
 	optionsBuilder := dbx.StatementBuilder.
 		Insert("question_options").
-		Columns("id", "question_id", "text", "is_correct")
+		Columns("id", "question_id", "text", "is_correct").
+		Suffix("ON CONFLICT (id, question_id) DO NOTHING")
 
 	for _, option := range question.Options {
 		optionsBuilder = optionsBuilder.Values(option.ID, question.ID, option.Text, option.IsCorrect)
@@ -165,7 +167,9 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 			return apperrors.Internal(err)
 		}
 
-		_, err = db.pool.Exec(ctx, query, args...)
+		var insertedID uuid.UUID
+		err = tx.QueryRow(ctx, query, args...).Scan(&insertedID)
+
 		switch {
 		case dbx.IsForeignKeyViolation(err, "category_id"):
 			return apperrors.BadRequestHidden(err, "specified category was not found")
@@ -177,6 +181,8 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 			return apperrors.BadRequestHidden(err, "invalid question source")
 		case dbx.NotValidEnumType(err, "language"):
 			return apperrors.BadRequestHidden(err, "invalid question language")
+		case dbx.IsNoRows(err):
+			return nil
 		case err != nil:
 			return apperrors.Internal(err)
 		}

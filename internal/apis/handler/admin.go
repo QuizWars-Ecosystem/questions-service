@@ -2,8 +2,6 @@ package handler
 
 import (
 	"context"
-	"go.uber.org/zap"
-
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
@@ -81,7 +79,6 @@ func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.Creat
 
 	err = h.service.CreateQuestion(ctx, req)
 	if err != nil {
-		h.logger.Error("Error creating question [2]", zap.Error(err))
 		return nil, err
 	}
 

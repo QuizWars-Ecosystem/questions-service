@@ -55,3 +55,168 @@ var (
 		Name: "Stars",
 	}
 )
+
+// Questions
+var (
+	sportEngQuestionsKey = "sport:eng"
+	sportRusQuestionsKey = "sport:rus"
+
+	countriesEngQuestionsKey = "countries:eng"
+	countriesRusQuestionsKey = "countries:rus"
+
+	starsEngQuestionsKey = "stars:eng"
+	starsRusQuestionsKey = "stars:rus"
+
+	questionsMap = map[string]*questionsv1.Question{
+		sportEngQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   sportCategory,
+			Language:   "eng",
+			Text:       "With which sport is Kenenisa Bekele associated?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "Athletics",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Boxing",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Motor racing",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Rowing",
+					IsCorrect: false,
+				},
+			},
+		},
+		sportRusQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   sportCategory,
+			Language:   "rus",
+			Text:       "С каким видом спорта связан Кенениса Бекеле?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "Бокс",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Автогонки",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Легкая атлетика",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Гребля",
+					IsCorrect: false,
+				},
+			},
+		},
+		countriesEngQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   countriesCategory,
+			Language:   "eng",
+			Text:       "Which country borders Italy, Switzerland, Germany, Czech Republic, Hungary, Slovenia, and Liechtenstein?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "Austria",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Bosnia and Herzegovina",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Croatia",
+					IsCorrect: true,
+				},
+				{
+					Text:      "San Marino",
+					IsCorrect: false,
+				},
+			},
+		},
+		countriesRusQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   countriesCategory,
+			Language:   "rus",
+			Text:       "На них проходят границы Италии, Швейцарии, Германии, Швеции, Венгрии, Словении и Лихтенштейна?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "Австрия",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Босния и Герцеговина",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Хорватия",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Сан-Марино",
+					IsCorrect: false,
+				},
+			},
+		},
+		starsEngQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   starsCategory,
+			Language:   "eng",
+			Text:       "How old was Muhammad Ali when he died?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "61",
+					IsCorrect: false,
+				},
+				{
+					Text:      "56",
+					IsCorrect: true,
+				},
+				{
+					Text:      "He is still alive",
+					IsCorrect: false,
+				},
+				{
+					Text:      "74",
+					IsCorrect: true,
+				},
+			},
+		},
+		starsRusQuestionsKey: {
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Category:   starsCategory,
+			Language:   "eng",
+			Text:       "Сколько лет было Мухаммеду Али, когда он умер?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "61",
+					IsCorrect: false,
+				},
+				{
+					Text:      "56",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Он все еще жив",
+					IsCorrect: false,
+				},
+				{
+					Text:      "74",
+					IsCorrect: true,
+				},
+			},
+		},
+	}
+)

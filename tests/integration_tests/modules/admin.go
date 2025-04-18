@@ -132,33 +132,60 @@ func AdminServiceTest(t *testing.T, client questionsv1.QuestionsAdminServiceClie
 		testerror.RequireForbiddenError(t, err, jwt.AuthPermissionDeniedError)
 	})
 
-	t.Run("admin.CreateQuestion: successful", func(t *testing.T) {
+	t.Run("admin.CreateQuestion: eng: successful", func(t *testing.T) {
+		question := questionsMap[sportEngQuestionsKey]
 		_, err := client.CreateQuestion(adminCtx, &questionsv1.CreateQuestionRequest{
-			Type:       questionsv1.Type_TYPE_SINGLE,
-			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
-			CategoryId: sportCategory.Id,
-			Language:   "eng",
-			Text:       "With which sport is Kenenisa Bekele associated?",
-			Options: []*questionsv1.Option{
-				{
-					Text:      "Athletics",
-					IsCorrect: true,
-				},
-				{
-					Text:      "Boxing",
-					IsCorrect: false,
-				},
-				{
-					Text:      "Motor racing",
-					IsCorrect: false,
-				},
-				{
-					Text:      "Rowing",
-					IsCorrect: false,
-				},
-			},
+			Type:       question.Type,
+			Difficulty: question.Difficulty,
+			CategoryId: question.Category.Id,
+			Language:   question.Language,
+			Text:       question.Text,
+			Options:    question.Options,
 		})
 
 		require.NoError(t, err)
+	})
+
+	t.Run("admin.CreateQuestion: already exists", func(t *testing.T) {
+		question := questionsMap[sportEngQuestionsKey]
+		_, err := client.CreateQuestion(adminCtx, &questionsv1.CreateQuestionRequest{
+			Type:       question.Type,
+			Difficulty: question.Difficulty,
+			CategoryId: question.Category.Id,
+			Language:   question.Language,
+			Text:       question.Text,
+			Options:    question.Options,
+		})
+
+		require.NoError(t, err)
+	})
+
+	t.Run("admin.CreateQuestion: rus: successful", func(t *testing.T) {
+		question := questionsMap[sportRusQuestionsKey]
+		_, err := client.CreateQuestion(adminCtx, &questionsv1.CreateQuestionRequest{
+			Type:       question.Type,
+			Difficulty: question.Difficulty,
+			CategoryId: question.Category.Id,
+			Language:   question.Language,
+			Text:       question.Text,
+			Options:    question.Options,
+		})
+
+		require.NoError(t, err)
+	})
+
+	t.Run("admin.CreateQuestion: list: successful", func(t *testing.T) {
+		for _, question := range questionsMap {
+			_, err := client.CreateQuestion(adminCtx, &questionsv1.CreateQuestionRequest{
+				Type:       question.Type,
+				Difficulty: question.Difficulty,
+				CategoryId: question.Category.Id,
+				Language:   question.Language,
+				Text:       question.Text,
+				Options:    question.Options,
+			})
+
+			require.NoError(t, err)
+		}
 	})
 }
