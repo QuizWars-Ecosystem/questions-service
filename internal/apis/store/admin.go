@@ -19,6 +19,10 @@ func (s *Store) GetFilteredQuestions(ctx context.Context, filter *admin.Question
 	return qs, amount, err
 }
 
+func (s *Store) SaveCategory(ctx context.Context, name string) (int32, error) {
+	return s.db.SaveCategory(ctx, name)
+}
+
 func (s *Store) SaveQuestion(ctx context.Context, question *questions.Hashed) error {
 	return s.db.SaveQuestion(ctx, question)
 }

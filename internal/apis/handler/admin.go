@@ -51,6 +51,22 @@ func (h *Handler) GetFilteredQuestions(ctx context.Context, request *questionsv1
 	}, nil
 }
 
+func (h *Handler) CreateCategory(ctx context.Context, request *questionsv1.CreateCategoryRequest) (*questionsv1.CreateCategoryResponse, error) {
+	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := h.service.CreateCategory(ctx, request.GetName())
+	if err != nil {
+		return nil, err
+	}
+
+	return &questionsv1.CreateCategoryResponse{
+		Id: id,
+	}, nil
+}
+
 func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.CreateQuestionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {

@@ -2,14 +2,23 @@ package service
 
 import (
 	"context"
-
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
+	"strings"
+	"unicode"
 )
 
 func (s *Service) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
 	return s.store.GetFilteredQuestions(ctx, filter)
+}
+
+func (s *Service) CreateCategory(ctx context.Context, name string) (int32, error) {
+	runes := []rune(name)
+	runes[0] = unicode.ToUpper(runes[0])
+	result := string(runes[0]) + strings.ToLower(string(runes[1:]))
+
+	return s.store.SaveCategory(ctx, result)
 }
 
 func (s *Service) CreateQuestion(ctx context.Context, req *questions.CreateQuestionRequest) error {

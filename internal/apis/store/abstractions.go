@@ -15,6 +15,7 @@ type IStore interface {
 	GetQuestionsBatch(ctx context.Context, filter *filter.QuestionsFilter) ([]*questions.Question, error)
 	GetCategories(ctx context.Context) ([]*questions.Category, error)
 	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
+	SaveCategory(ctx context.Context, name string) (int32, error)
 	SaveQuestion(ctx context.Context, question *questions.Hashed) error
 	UpdateCategory(ctx context.Context, id int32, name string) error
 	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error
@@ -35,6 +36,7 @@ type IClientDatabase interface {
 
 type IAdminDatabase interface {
 	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
+	SaveCategory(ctx context.Context, name string) (int32, error)
 	SaveQuestion(ctx context.Context, question *questions.Hashed) error
 	UpdateCategory(ctx context.Context, id int32, name string) error
 	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error

@@ -120,6 +120,29 @@ func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.Ques
 	return qs, total, nil
 }
 
+func (db *Database) SaveCategory(ctx context.Context, name string) (int32, error) {
+	builder := dbx.StatementBuilder.
+		Insert("categories").
+		Columns("name").
+		Values(name).
+		Suffix("ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name").
+		Suffix("RETURNING id")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return 0, apperrors.Internal(err)
+	}
+
+	var id int32
+	err = db.pool.QueryRow(ctx, query, args...).Scan(&id)
+
+	if err != nil {
+		return 0, apperrors.Internal(err)
+	}
+
+	return id, nil
+}
+
 func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed) error {
 	builder := dbx.StatementBuilder.
 		Insert("questions").

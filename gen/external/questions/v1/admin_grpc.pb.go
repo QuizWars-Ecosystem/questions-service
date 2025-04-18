@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	QuestionsAdminService_GetFilteredQuestions_FullMethodName = "/questions.v1.QuestionsAdminService/GetFilteredQuestions"
+	QuestionsAdminService_CreateCategory_FullMethodName       = "/questions.v1.QuestionsAdminService/CreateCategory"
 	QuestionsAdminService_CreateQuestion_FullMethodName       = "/questions.v1.QuestionsAdminService/CreateQuestion"
 	QuestionsAdminService_UpdateCategory_FullMethodName       = "/questions.v1.QuestionsAdminService/UpdateCategory"
 	QuestionsAdminService_UpdateQuestion_FullMethodName       = "/questions.v1.QuestionsAdminService/UpdateQuestion"
@@ -34,6 +35,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuestionsAdminServiceClient interface {
 	GetFilteredQuestions(ctx context.Context, in *GetFilteredQuestionsRequest, opts ...grpc.CallOption) (*GetFilteredQuestionsResponse, error)
+	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
 	CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateQuestion(ctx context.Context, in *UpdateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -54,6 +56,16 @@ func (c *questionsAdminServiceClient) GetFilteredQuestions(ctx context.Context, 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetFilteredQuestionsResponse)
 	err := c.cc.Invoke(ctx, QuestionsAdminService_GetFilteredQuestions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *questionsAdminServiceClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateCategoryResponse)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_CreateCategory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,6 +137,7 @@ func (c *questionsAdminServiceClient) DeleteQuestionOption(ctx context.Context, 
 // for forward compatibility.
 type QuestionsAdminServiceServer interface {
 	GetFilteredQuestions(context.Context, *GetFilteredQuestionsRequest) (*GetFilteredQuestionsResponse, error)
+	CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error)
 	CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error)
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error)
 	UpdateQuestion(context.Context, *UpdateQuestionRequest) (*emptypb.Empty, error)
@@ -142,6 +155,9 @@ type UnimplementedQuestionsAdminServiceServer struct{}
 
 func (UnimplementedQuestionsAdminServiceServer) GetFilteredQuestions(context.Context, *GetFilteredQuestionsRequest) (*GetFilteredQuestionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFilteredQuestions not implemented")
+}
+func (UnimplementedQuestionsAdminServiceServer) CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
 }
 func (UnimplementedQuestionsAdminServiceServer) CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestion not implemented")
@@ -195,6 +211,24 @@ func _QuestionsAdminService_GetFilteredQuestions_Handler(srv interface{}, ctx co
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QuestionsAdminServiceServer).GetFilteredQuestions(ctx, req.(*GetFilteredQuestionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QuestionsAdminService_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsAdminServiceServer).CreateCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsAdminService_CreateCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsAdminServiceServer).CreateCategory(ctx, req.(*CreateCategoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -317,6 +351,10 @@ var QuestionsAdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFilteredQuestions",
 			Handler:    _QuestionsAdminService_GetFilteredQuestions_Handler,
+		},
+		{
+			MethodName: "CreateCategory",
+			Handler:    _QuestionsAdminService_CreateCategory_Handler,
 		},
 		{
 			MethodName: "CreateQuestion",
