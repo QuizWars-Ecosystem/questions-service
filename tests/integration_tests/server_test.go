@@ -1,11 +1,12 @@
 package integration_tests
 
 import (
+	"testing"
+
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/server"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/modules"
-	"testing"
 
 	test "github.com/QuizWars-Ecosystem/go-common/pkg/testing/server"
 	"github.com/stretchr/testify/require"

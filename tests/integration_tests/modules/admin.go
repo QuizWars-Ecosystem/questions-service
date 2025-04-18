@@ -1,16 +1,16 @@
 package modules
 
 import (
+	"testing"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
 	testerror "github.com/QuizWars-Ecosystem/go-common/pkg/testing/errors"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func AdminServiceTest(t *testing.T, client questionsv1.QuestionsAdminServiceClient, cfg *config.TestConfig) {
-
 	prepare(t, cfg)
 
 	t.Run("admin.GetFilteredQuestions: access token not provided", func(t *testing.T) {

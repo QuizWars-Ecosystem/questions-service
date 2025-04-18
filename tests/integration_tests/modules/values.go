@@ -2,11 +2,12 @@ package modules
 
 import (
 	"context"
+	"testing"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func prepare(t *testing.T, cfg *config.TestConfig) {

@@ -4,6 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"strings"
+	"time"
+
 	"github.com/DavidMovas/gopherbox/pkg/closer"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/clients"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
@@ -15,9 +19,6 @@ import (
 	"github.com/QuizWars-Ecosystem/questions-service/internal/config"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"net"
-	"strings"
-	"time"
 )
 
 type TestServer struct {

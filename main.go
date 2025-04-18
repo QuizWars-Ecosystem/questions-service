@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
-	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
-	questions "github.com/QuizWars-Ecosystem/questions-service/internal/config"
-	"github.com/QuizWars-Ecosystem/questions-service/internal/server"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
+	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
+	questions "github.com/QuizWars-Ecosystem/questions-service/internal/config"
+	"github.com/QuizWars-Ecosystem/questions-service/internal/server"
 )
 
 func main() {

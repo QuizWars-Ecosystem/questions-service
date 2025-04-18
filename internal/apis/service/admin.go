@@ -2,11 +2,12 @@ package service
 
 import (
 	"context"
+	"strings"
+	"unicode"
+
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	"github.com/google/uuid"
-	"strings"
-	"unicode"
 )
 
 func (s *Service) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {

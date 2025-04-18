@@ -1,10 +1,11 @@
 package config
 
 import (
+	"time"
+
 	def "github.com/QuizWars-Ecosystem/go-common/pkg/config"
 	test "github.com/QuizWars-Ecosystem/go-common/pkg/testing/config"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/config"
-	"time"
 )
 
 type TestConfig struct {

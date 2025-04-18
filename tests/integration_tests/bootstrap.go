@@ -2,9 +2,10 @@ package integration_tests
 
 import (
 	"context"
-	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 	"strings"
 	"testing"
+
+	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/testing/migrations"
 

@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
@@ -136,7 +137,6 @@ func (db *Database) SaveCategory(ctx context.Context, name string) (int32, error
 
 	var id int32
 	err = db.pool.QueryRow(ctx, query, args...).Scan(&id)
-
 	if err != nil {
 		return 0, apperrors.Internal(err)
 	}
@@ -202,7 +202,6 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 
 		return nil
 	})
-
 	if err != nil {
 		db.logger.Warn("failed to save question", zap.Error(err))
 		return apperrors.Internal(err)

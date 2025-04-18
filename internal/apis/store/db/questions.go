@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+
 	"github.com/Masterminds/squirrel"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/dbx"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
