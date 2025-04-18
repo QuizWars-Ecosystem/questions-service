@@ -7,8 +7,9 @@ import (
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
-	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"go.uber.org/zap"
 )
 
 func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
@@ -150,24 +151,54 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 		Values(question.ID, question.Text, question.Hash, question.Category.ID, question.Type, question.Source, question.Difficulty, question.Language, question.CreatedAt).
 		Suffix("ON CONFLICT DO NOTHING")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return apperrors.Internal(err)
+	optionsBuilder := dbx.StatementBuilder.
+		Insert("question_options").
+		Columns("id", "question_id", "text", "is_correct")
+
+	for _, option := range question.Options {
+		optionsBuilder = optionsBuilder.Values(option.ID, question.ID, option.Text, option.IsCorrect)
 	}
 
-	_, err = db.pool.Exec(ctx, query, args...)
-	switch {
-	case dbx.IsForeignKeyViolation(err, "category_id"):
-		return apperrors.BadRequestHidden(err, "specified category was not found")
-	case dbx.NotValidEnumType(err, "difficulty"):
-		return apperrors.BadRequestHidden(err, "invalid question difficulty")
-	case dbx.NotValidEnumType(err, "type"):
-		return apperrors.BadRequestHidden(err, "invalid question type")
-	case dbx.NotValidEnumType(err, "source"):
-		return apperrors.BadRequestHidden(err, "invalid question source")
-	case dbx.NotValidEnumType(err, "language"):
-		return apperrors.BadRequestHidden(err, "invalid question language")
-	case err != nil:
+	err := dbx.InTransaction(ctx, db.pool, func(ctx context.Context, tx pgx.Tx) error {
+		query, args, err := builder.ToSql()
+		if err != nil {
+			return apperrors.Internal(err)
+		}
+
+		_, err = db.pool.Exec(ctx, query, args...)
+		switch {
+		case dbx.IsForeignKeyViolation(err, "category_id"):
+			return apperrors.BadRequestHidden(err, "specified category was not found")
+		case dbx.NotValidEnumType(err, "difficulty"):
+			return apperrors.BadRequestHidden(err, "invalid question difficulty")
+		case dbx.NotValidEnumType(err, "type"):
+			return apperrors.BadRequestHidden(err, "invalid question type")
+		case dbx.NotValidEnumType(err, "source"):
+			return apperrors.BadRequestHidden(err, "invalid question source")
+		case dbx.NotValidEnumType(err, "language"):
+			return apperrors.BadRequestHidden(err, "invalid question language")
+		case err != nil:
+			return apperrors.Internal(err)
+		}
+
+		query, args, err = optionsBuilder.ToSql()
+		if err != nil {
+			return apperrors.Internal(err)
+		}
+
+		_, err = tx.Exec(ctx, query, args...)
+		switch {
+		case dbx.IsForeignKeyViolation(err, "question_id"):
+			return apperrors.Internal(err)
+		case err != nil:
+			return apperrors.Internal(err)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		db.logger.Warn("failed to save question", zap.Error(err))
 		return apperrors.Internal(err)
 	}
 

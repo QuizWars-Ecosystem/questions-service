@@ -2,13 +2,14 @@ package handler
 
 import (
 	"context"
+	"go.uber.org/zap"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
-	"github.com/QuizWars-Ecosystem/go-common/pkg/uuidx"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
+	"github.com/google/uuid"
 
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -80,6 +81,7 @@ func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.Creat
 
 	err = h.service.CreateQuestion(ctx, req)
 	if err != nil {
+		h.logger.Error("Error creating question [2]", zap.Error(err))
 		return nil, err
 	}
 
@@ -106,7 +108,7 @@ func (h *Handler) UpdateQuestion(ctx context.Context, request *questionsv1.Updat
 		return nil, err
 	}
 
-	id, err := uuidx.NewUUIDFromString(request.GetId())
+	id, err := uuid.Parse(request.GetId())
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}
@@ -130,7 +132,7 @@ func (h *Handler) UpdateQuestionOption(ctx context.Context, request *questionsv1
 		return nil, err
 	}
 
-	id, err := uuidx.NewUUIDFromString(request.GetId())
+	id, err := uuid.Parse(request.GetId())
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}
@@ -154,7 +156,7 @@ func (h *Handler) DeleteQuestion(ctx context.Context, request *questionsv1.Delet
 		return nil, err
 	}
 
-	id, err := uuidx.NewUUIDFromString(request.GetId())
+	id, err := uuid.Parse(request.GetId())
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}
@@ -173,7 +175,7 @@ func (h *Handler) DeleteQuestionOption(ctx context.Context, request *questionsv1
 		return nil, err
 	}
 
-	id, err := uuidx.NewUUIDFromString(request.GetId())
+	id, err := uuid.Parse(request.GetId())
 	if err != nil {
 		return nil, apperrors.Internal(err)
 	}

@@ -2,6 +2,7 @@ package questions
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"strings"
 	"time"
@@ -9,20 +10,24 @@ import (
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
-	"github.com/gofrs/uuid"
-
-	pgxuuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
+	"github.com/google/uuid"
 )
 
 var _ abstractions.Requestable[Option, *questionsv1.Option] = (*Option)(nil)
 
 func (o *Option) Request(req *questionsv1.Option) (*Option, error) {
-	id, err := uuid.FromString(req.Id)
-	if err != nil {
-		return nil, err
+	var id uuid.UUID
+	var err error
+
+	if req.Id == "" {
+		id = uuid.New()
+	} else {
+		if id, err = uuid.Parse(req.Id); err != nil {
+			return nil, apperrors.Internal(err)
+		}
 	}
 
-	o.ID = pgxuuid.UUID{UUID: id}
+	o.ID = id
 	o.Text = req.Text
 	o.IsCorrect = req.IsCorrect
 
@@ -41,15 +46,11 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 	}
 
 	text := strings.ToLower(strings.Trim(strings.TrimSpace(req.GetText()), " "))
-	hash := md5.Sum([]byte(text))
-
-	id, err := uuid.NewV4()
-	if err != nil {
-		return nil, apperrors.Internal(err)
-	}
+	sum := md5.Sum([]byte(text))
+	hash := hex.EncodeToString(sum[:])
 
 	q := Question{
-		ID:         pgxuuid.UUID{UUID: id},
+		ID:         uuid.New(),
 		Type:       TypeFromGRPCEnum(req.Type),
 		Source:     Text,
 		Difficulty: DifficultyFromGRPCEnum(req.Difficulty),
@@ -63,6 +64,7 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 		return nil, apperrors.BadRequest(errors.New("question must contain at least one option"))
 	}
 
+	var err error
 	options := make([]*Option, len(req.Options))
 	for i, o := range req.Options {
 		option := &Option{}
@@ -77,7 +79,7 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 	q.Options = options
 
 	c.Hashed = &Hashed{
-		Hash:     string(hash[:]),
+		Hash:     hash,
 		Question: q,
 	}
 

@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"context"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
 	testerror "github.com/QuizWars-Ecosystem/go-common/pkg/testing/errors"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
@@ -53,35 +52,113 @@ func AdminServiceTest(t *testing.T, client questionsv1.QuestionsAdminServiceClie
 		require.NoError(t, err)
 		require.Empty(t, res.Questions)
 	})
+
+	t.Run("admin.CreateCategory: access token not provided", func(t *testing.T) {
+		_, err := client.CreateCategory(emptyCtx, &questionsv1.CreateCategoryRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthAccessTokenNotProvidedError)
+	})
+
+	t.Run("admin.CreateCategory: invalid token", func(t *testing.T) {
+		_, err := client.CreateCategory(invalidCtx, &questionsv1.CreateCategoryRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthInvalidTokenError)
+	})
+
+	t.Run("admin.CreateCategory: permission denied", func(t *testing.T) {
+		_, err := client.CreateCategory(userCtx, &questionsv1.CreateCategoryRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthPermissionDeniedError)
+	})
+
+	t.Run("admin.CreateCategory: successful", func(t *testing.T) {
+		res, err := client.CreateCategory(adminCtx, &questionsv1.CreateCategoryRequest{
+			Name: sportCategory.Name,
+		})
+
+		require.NoError(t, err)
+		require.NotEqual(t, 0, res.Id)
+		sportCategory.Id = res.Id
+	})
+
+	t.Run("admin.CreateCategory: list: successful", func(t *testing.T) {
+		useCase := []struct {
+			name  string
+			owner *questionsv1.Category
+		}{
+			{
+				name:  countriesCategory.Name,
+				owner: countriesCategory,
+			},
+			{
+				name:  starsCategory.Name,
+				owner: starsCategory,
+			},
+		}
+
+		for _, u := range useCase {
+			res, err := client.CreateCategory(adminCtx, &questionsv1.CreateCategoryRequest{
+				Name: u.name,
+			})
+
+			require.NoError(t, err)
+			require.NotEqual(t, 0, res.Id)
+
+			u.owner.Id = res.Id
+		}
+	})
+
+	t.Run("admin.CreateQuestion: access token not provided", func(t *testing.T) {
+		_, err := client.CreateQuestion(emptyCtx, &questionsv1.CreateQuestionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthAccessTokenNotProvidedError)
+	})
+
+	t.Run("admin.CreateQuestion: invalid token", func(t *testing.T) {
+		_, err := client.CreateQuestion(invalidCtx, &questionsv1.CreateQuestionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthInvalidTokenError)
+	})
+
+	t.Run("admin.CreateQuestion: permission denied", func(t *testing.T) {
+		_, err := client.CreateQuestion(userCtx, &questionsv1.CreateQuestionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthPermissionDeniedError)
+	})
+
+	t.Run("admin.CreateQuestion: successful", func(t *testing.T) {
+		_, err := client.CreateQuestion(adminCtx, &questionsv1.CreateQuestionRequest{
+			Type:       questionsv1.Type_TYPE_SINGLE,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			CategoryId: sportCategory.Id,
+			Language:   "eng",
+			Text:       "With which sport is Kenenisa Bekele associated?",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "Athletics",
+					IsCorrect: true,
+				},
+				{
+					Text:      "Boxing",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Motor racing",
+					IsCorrect: false,
+				},
+				{
+					Text:      "Rowing",
+					IsCorrect: false,
+				},
+			},
+		})
+
+		require.NoError(t, err)
+	})
 }
-
-func prepare(t *testing.T, cfg *config.TestConfig) {
-	var err error
-	auth := jwt.NewService(cfg.ServiceConfig.JWT.Secret, cfg.ServiceConfig.JWT.AccessExpiration, cfg.ServiceConfig.JWT.RefreshExpiration)
-
-	adminToken, err = auth.GenerateToken("1", string(jwt.Admin))
-	require.NoError(t, err)
-
-	userToken, err = auth.GenerateToken("2", string(jwt.User))
-	require.NoError(t, err)
-
-	adminCtx = auth.SetTokenInContext(t.Context(), adminToken)
-	userCtx = auth.SetTokenInContext(t.Context(), userToken)
-	emptyCtx = auth.SetTokenInContext(t.Context(), "")
-	invalidCtx = auth.SetTokenInContext(t.Context(), "invalid token")
-}
-
-var (
-	emptyCtx   context.Context
-	invalidCtx context.Context
-)
-
-var (
-	adminToken string
-	adminCtx   context.Context
-)
-
-var (
-	userToken string
-	userCtx   context.Context
-)

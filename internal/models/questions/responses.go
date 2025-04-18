@@ -22,7 +22,7 @@ func (q *Question) Response() (*questionsv1.Question, error) {
 	var req questionsv1.Question
 	var err error
 
-	req.Id = q.ID.UUID.String()
+	req.Id = q.ID.String()
 	req.Type = q.Type.TypeToGRPCEnum()
 	req.Source = q.Source.SourceToGRPCEnum()
 	req.Difficulty = q.Difficulty.DifficultyToGRPCEnum()
@@ -56,7 +56,7 @@ var _ abstractions.Responseable[questionsv1.Option] = (*Option)(nil)
 func (o *Option) Response() (*questionsv1.Option, error) {
 	var req questionsv1.Option
 
-	req.Id = o.ID.UUID.String()
+	req.Id = o.ID.String()
 	req.Text = o.Text
 	req.IsCorrect = o.IsCorrect
 

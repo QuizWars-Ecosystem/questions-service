@@ -7,7 +7,7 @@ import (
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/filter"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
-	uuid "github.com/jackc/pgx/pgtype/ext/gofrs-uuid"
+	"github.com/google/uuid"
 )
 
 func (db *Database) GetRandomQuestionMeta(ctx context.Context, amount int64) ([]*questions.Meta, error) {

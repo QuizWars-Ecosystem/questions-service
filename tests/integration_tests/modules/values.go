@@ -3,6 +3,7 @@ package modules
 import (
 	"context"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
+	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -24,6 +25,7 @@ func prepare(t *testing.T, cfg *config.TestConfig) {
 	invalidCtx = auth.SetTokenInContext(t.Context(), "invalid token")
 }
 
+// Contexts for auth (JWT)
 var (
 	emptyCtx   context.Context
 	invalidCtx context.Context
@@ -37,4 +39,19 @@ var (
 var (
 	userToken string
 	userCtx   context.Context
+)
+
+// Categories
+var (
+	sportCategory = &questionsv1.Category{
+		Name: "Sport",
+	}
+
+	countriesCategory = &questionsv1.Category{
+		Name: "Countries",
+	}
+
+	starsCategory = &questionsv1.Category{
+		Name: "Stars",
+	}
 )
