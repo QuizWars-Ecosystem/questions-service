@@ -5,9 +5,9 @@ import questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external
 type Type string
 
 const (
-	Single  Type = "Single"
-	Multi   Type = "Multi"
-	Betting Type = "Betting"
+	Single  Type = "single"
+	Multi   Type = "multi"
+	Betting Type = "betting"
 )
 
 func (t Type) String() string {
@@ -43,11 +43,11 @@ func TypeFromGRPCEnum(enum questionsv1.Type) Type {
 type Source string
 
 const (
-	Text      Source = "Text"
-	Image     Source = "Image"
-	Audio     Source = "Audio"
-	Animation Source = "Animation"
-	Video     Source = "Video"
+	Text      Source = "text"
+	Image     Source = "image"
+	Audio     Source = "audio"
+	Animation Source = "animation"
+	Video     Source = "video"
 )
 
 func (s Source) SourceToGRPCEnum() questionsv1.Source {
@@ -91,10 +91,10 @@ func (s Source) String() string {
 type Difficulty string
 
 const (
-	Easy     Difficulty = "Easy"
-	Medium   Difficulty = "Medium"
-	Hard     Difficulty = "Hard"
-	VeryHard Difficulty = "Vary Hard"
+	Easy     Difficulty = "easy"
+	Medium   Difficulty = "medium"
+	Hard     Difficulty = "hard"
+	VeryHard Difficulty = "vary Hard"
 )
 
 func (d Difficulty) String() string {

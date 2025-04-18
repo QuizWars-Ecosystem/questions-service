@@ -1,7 +1,7 @@
 -- Write your migrate up statements here
 
 CREATE TYPE difficulty_type AS ENUM ('easy', 'medium', 'hard', 'very hard');
-CREATE TYPE type_enum AS ENUM ('singe', 'multi', 'betting');
+CREATE TYPE type_enum AS ENUM ('single', 'multi', 'betting');
 CREATE TYPE source_enum AS ENUM ('text', 'image', 'audio', 'animation', 'video');
 CREATE TYPE language_enum AS ENUM ('eng', 'rus');
 
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS questions (
     text VARCHAR(500) NOT NULL,
     text_hash CHAR(32) UNIQUE NOT NULL,
     category_id INTEGER NOT NULL REFERENCES categories(id),
-    type type_enum NOT NULL DEFAULT 'singe' CHECK ( type IN ('singe', 'multi', 'betting')),
+    type type_enum NOT NULL DEFAULT 'single' CHECK ( type IN ('single', 'multi', 'betting')),
     source source_enum NOT NULL DEFAULT 'text' CHECK ( source IN ('text', 'image', 'audio', 'animation', 'video')),
     difficulty difficulty_type NOT NULL DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'very hard')),
     language language_enum NOT NULL DEFAULT 'eng' CHECK (language IN ('eng', 'rus')),
