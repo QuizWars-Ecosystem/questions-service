@@ -129,7 +129,7 @@ var (
 		},
 		countriesEngQuestionsKey: {
 			Type:       questionsv1.Type_TYPE_SINGLE,
-			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_HARD,
 			Category:   countriesCategory,
 			Language:   "eng",
 			Text:       "Which country borders Italy, Switzerland, Germany, Czech Republic, Hungary, Slovenia, and Liechtenstein?",
@@ -154,7 +154,7 @@ var (
 		},
 		countriesRusQuestionsKey: {
 			Type:       questionsv1.Type_TYPE_SINGLE,
-			Difficulty: questionsv1.Difficulty_DIFFICULTY_EASY,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_MEDIUM,
 			Category:   countriesCategory,
 			Language:   "rus",
 			Text:       "На них проходят границы Италии, Швейцарии, Германии, Швеции, Венгрии, Словении и Лихтенштейна?",
