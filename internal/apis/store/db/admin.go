@@ -14,14 +14,25 @@ import (
 )
 
 func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error) {
-	builder := squirrel.StatementBuilder.
-		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
-		From("questions q").
-		Join("categories c ON c.id = q.category_id").
-		LeftJoin("question_options o ON o.question_id = q.id").
+	subquery := squirrel.StatementBuilder.
+		Select("id").
+		From("questions").
 		OrderBy(filter.Order.String() + " " + filter.Sort.String()).
 		Limit(filter.Limit).
 		Offset(filter.Offset)
+
+	subqueryQuery, subqueryArgs, err := subquery.ToSql()
+	if err != nil {
+		return nil, 0, apperrors.Internal(err)
+	}
+
+	builder := squirrel.StatementBuilder.
+		Select("q.id", "q.text", "c.id", "c.name", "o.id", "o.text", "o.is_correct", "q.type", "q.source", "q.difficulty", "q.language", "q.created_at").
+		From("(" + subqueryQuery + ") AS filtered_q").
+		Join("questions q ON q.id = filtered_q.id").
+		Join("categories c ON c.id = q.category_id").
+		LeftJoin("question_options o ON o.question_id = q.id").
+		OrderBy(filter.Order.String() + " " + filter.Sort.String())
 
 	if filter.TypesFilter != nil {
 		builder = builder.
@@ -49,15 +60,20 @@ func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.Ques
 			Where(squirrel.LtOrEq{"q.created_at": filter.CreatedAtFilter.To})
 	}
 
-	countQuery := dbx.StatementBuilder.Select("COUNT(*)").From("questions")
-
-	b := &pgx.Batch{}
-
-	if err := dbx.QueryBatch(b, builder); err != nil {
+	builderQuery, builderArgs, err := builder.ToSql()
+	if err != nil {
 		return nil, 0, apperrors.Internal(err)
 	}
 
-	if err := dbx.QueryBatch(b, countQuery); err != nil {
+	allArgs := append(builderArgs, subqueryArgs...)
+
+	countQuery := dbx.StatementBuilder.Select("COUNT(text_hash)").From("questions")
+
+	b := &pgx.Batch{}
+
+	b.Queue(builderQuery, allArgs...)
+
+	if err = dbx.QueryBatch(b, countQuery); err != nil {
 		return nil, 0, apperrors.Internal(err)
 	}
 
