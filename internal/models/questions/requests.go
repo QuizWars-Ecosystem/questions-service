@@ -45,8 +45,8 @@ func (c CreateQuestionRequest) Request(req *questionsv1.CreateQuestionRequest) (
 		return nil, apperrors.BadRequest(errors.New("text is required"))
 	}
 
-	text := strings.ToLower(strings.Trim(strings.TrimSpace(req.GetText()), " "))
-	sum := md5.Sum([]byte(text))
+	text := strings.TrimSpace(req.GetText())
+	sum := md5.Sum([]byte(strings.ToLower(text)))
 	hash := hex.EncodeToString(sum[:])
 
 	q := Question{

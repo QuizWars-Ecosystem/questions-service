@@ -297,8 +297,9 @@ func (db *Database) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin
 	}
 
 	cmd, err := db.pool.Exec(ctx, query, args...)
+
 	switch {
-	case err == nil && cmd.RowsAffected() == 0:
+	case dbx.IsNoRows(err) || err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("question", "id", id)
 	case dbx.IsForeignKeyViolation(err, "category_id"):
 		return apperrors.BadRequestHidden(err, "specified category was not found")
@@ -308,8 +309,6 @@ func (db *Database) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin
 		return apperrors.BadRequestHidden(err, "invalid question type")
 	case dbx.NotValidEnumType(err, "source"):
 		return apperrors.BadRequestHidden(err, "invalid question source")
-	case dbx.NotValidEnumType(err, "language"):
-		return apperrors.BadRequestHidden(err, "invalid question language")
 	case err != nil:
 		return apperrors.Internal(err)
 	}
@@ -335,7 +334,7 @@ func (db *Database) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req 
 	}
 
 	if !flag {
-		return apperrors.BadRequest(argumentsNotProvidedErr)
+		return apperrors.BadRequestHidden(argumentsNotProvidedErr, "arguments not provided")
 	}
 
 	query, args, err := builder.ToSql()
@@ -345,7 +344,7 @@ func (db *Database) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req 
 
 	cmd, err := db.pool.Exec(ctx, query, args...)
 	switch {
-	case err == nil && cmd.RowsAffected() == 0:
+	case dbx.IsNoRows(err) || err == nil && cmd.RowsAffected() == 0:
 		return apperrors.NotFound("option", "id", id)
 	case err != nil:
 		return apperrors.Internal(err)

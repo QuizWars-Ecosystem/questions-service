@@ -2,15 +2,13 @@ package handler
 
 import (
 	"context"
-
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
+	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/admin"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	"github.com/google/uuid"
-
-	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -108,7 +106,7 @@ func (h *Handler) UpdateQuestion(ctx context.Context, request *questionsv1.Updat
 
 	id, err := uuid.Parse(request.GetId())
 	if err != nil {
-		return nil, apperrors.Internal(err)
+		return nil, apperrors.BadRequestHidden(err, "provided wrong uuid format")
 	}
 
 	req, err := abstractions.MakeRequest[admin.UpdateQuestionRequest](request)

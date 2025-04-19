@@ -2,6 +2,7 @@ package admin
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"strings"
 	"time"
 
@@ -86,11 +87,12 @@ func (u UpdateQuestionRequest) Request(req *questionsv1.UpdateQuestionRequest) (
 	}
 
 	if req.Text != nil {
-		text := strings.ToLower(strings.Trim(strings.TrimSpace(req.GetText()), " "))
-		hash := md5.Sum([]byte(text))
+		text := strings.TrimSpace(req.GetText())
+		sum := md5.Sum([]byte(strings.ToLower(text)))
+		hash := hex.EncodeToString(sum[:])
 
 		u.Text = req.Text
-		u.Hash = string(hash[:])
+		u.Hash = hash
 	}
 
 	if req.Language != nil {

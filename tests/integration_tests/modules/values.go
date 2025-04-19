@@ -68,6 +68,8 @@ var (
 	starsEngQuestionsKey = "stars:eng"
 	starsRusQuestionsKey = "stars:rus"
 
+	questionForDeleting = "sport:eng"
+
 	questionsMap = map[string]*questionsv1.Question{
 		sportEngQuestionsKey: {
 			Type:       questionsv1.Type_TYPE_SINGLE,
@@ -216,6 +218,31 @@ var (
 				{
 					Text:      "74",
 					IsCorrect: true,
+				},
+			},
+		},
+		questionForDeleting: {
+			Type:       questionsv1.Type_TYPE_MULTI,
+			Difficulty: questionsv1.Difficulty_DIFFICULTY_MEDIUM,
+			Category:   sportCategory,
+			Language:   "eng",
+			Text:       "SOME NOT IMPORTANT TEXT",
+			Options: []*questionsv1.Option{
+				{
+					Text:      "1",
+					IsCorrect: true,
+				},
+				{
+					Text:      "2",
+					IsCorrect: false,
+				},
+				{
+					Text:      "3",
+					IsCorrect: true,
+				},
+				{
+					Text:      "4",
+					IsCorrect: false,
 				},
 			},
 		},
