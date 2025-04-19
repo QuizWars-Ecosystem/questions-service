@@ -1,15 +1,15 @@
 package modules
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/tests/integration_tests/config"
 )
 
 func QuestionsServiceTest(t *testing.T, client questionsv1.QuestionsServiceClient, _ *config.TestConfig) {
-
 	t.Run("questions.GetQuestions: easy | eng | sport | <=10", func(t *testing.T) {
 		difficulty := questionsv1.Difficulty_DIFFICULTY_EASY
 		language := "eng"
