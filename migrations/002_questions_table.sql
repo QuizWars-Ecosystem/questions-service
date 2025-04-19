@@ -3,7 +3,6 @@
 CREATE TYPE difficulty_type AS ENUM ('easy', 'medium', 'hard', 'very hard');
 CREATE TYPE type_enum AS ENUM ('single', 'multi', 'betting');
 CREATE TYPE source_enum AS ENUM ('text', 'image', 'audio', 'animation', 'video');
-CREATE TYPE language_enum AS ENUM ('eng', 'rus');
 
 CREATE TABLE IF NOT EXISTS questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -13,7 +12,7 @@ CREATE TABLE IF NOT EXISTS questions (
     type type_enum NOT NULL DEFAULT 'single' CHECK ( type IN ('single', 'multi', 'betting')),
     source source_enum NOT NULL DEFAULT 'text' CHECK ( source IN ('text', 'image', 'audio', 'animation', 'video')),
     difficulty difficulty_type NOT NULL DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'very hard')),
-    language language_enum NOT NULL DEFAULT 'eng' CHECK (language IN ('eng', 'rus')),
+    language VARCHAR(3) NOT NULL DEFAULT 'eng',
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -37,7 +36,6 @@ DROP INDEX IF EXISTS idx_questions_type;
 
 DROP TABLE IF EXISTS questions;
 
-DROP TYPE IF EXISTS language_enum;
 DROP TYPE IF EXISTS type_enum;
 DROP TYPE IF EXISTS difficulty_type;
 
