@@ -55,6 +55,12 @@ var (
 	starsCategory = &questionsv1.Category{
 		Name: "Stars",
 	}
+
+	categoriesList = []*questionsv1.Category{
+		sportCategory,
+		countriesCategory,
+		starsCategory,
+	}
 )
 
 // Questions
