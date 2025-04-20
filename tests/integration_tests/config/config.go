@@ -3,6 +3,8 @@ package config
 import (
 	"time"
 
+	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
+
 	def "github.com/QuizWars-Ecosystem/go-common/pkg/config"
 	test "github.com/QuizWars-Ecosystem/go-common/pkg/testing/config"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/config"
@@ -20,22 +22,21 @@ func NewTestConfig() *TestConfig {
 
 	return &TestConfig{
 		ServiceConfig: &config.Config{
-			DefaultServiceConfig: def.DefaultServiceConfig{
-				Name:            "questions-service",
-				Address:         "questions_address",
-				Local:           true,
-				LogLevel:        "debug",
-				GRPCPort:        50051,
-				StartTimeout:    time.Second * 30,
-				ShutdownTimeout: time.Second * 30,
-				ConsulURL:       "consul:8500",
+			ServiceConfig: &def.ServiceConfig{
+				Name:         "questions-service",
+				Address:      "questions_address",
+				Local:        true,
+				GRPCPort:     50051,
+				StartTimeout: time.Second * 30,
+				StopTimeout:  time.Second * 30,
+				ConsulURL:    "consul:8500",
 			},
-			JWT: config.JWTConfig{
+			JWT: &jwt.Config{
 				Secret:            "secret",
 				AccessExpiration:  time.Hour,
 				RefreshExpiration: time.Hour,
 			},
-			StoreConfig: config.StoreConfig{
+			StoreConfig: &config.StoreConfig{
 				WarmUp:        true,
 				WarmUpAmount:  100,
 				WarmUpTimeout: time.Minute,
