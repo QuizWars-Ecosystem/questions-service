@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/grpc/reflection"
 	"net"
 
 	"github.com/DavidMovas/gopherbox/pkg/closer"
@@ -76,6 +77,10 @@ func NewServer(ctx context.Context, cfg *config.Config) (*Server, error) {
 	questionsv1.RegisterQuestionsServiceServer(grpcServer, hand)
 	questionsv1.RegisterQuestionsClientServiceServer(grpcServer, hand)
 	questionsv1.RegisterQuestionsAdminServiceServer(grpcServer, hand)
+
+	if cfg.Local {
+		reflection.Register(grpcServer)
+	}
 
 	return &Server{
 		grpcServer: grpcServer,
