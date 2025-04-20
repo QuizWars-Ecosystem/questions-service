@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var argumentsNotProvidedErr = errors.New("arguments not provided")
+var errArgumentsNotProvided = errors.New("arguments not provided")
 
 type Database struct {
 	pool   *pgxpool.Pool

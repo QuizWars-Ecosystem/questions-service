@@ -7,8 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"go.uber.org/zap"
-
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
 	questions "github.com/QuizWars-Ecosystem/questions-service/internal/config"
@@ -23,7 +21,7 @@ func main() {
 
 	manager, err := config.NewManager[questions.Config](path)
 	if err != nil {
-		slog.Error("Error loading config", zap.String("path", path), zap.Error(err))
+		slog.Error("Error loading config", "path", path, "error", err)
 		return
 	}
 

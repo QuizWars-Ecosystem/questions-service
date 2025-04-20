@@ -453,7 +453,7 @@ func AdminServiceTest(t *testing.T, client questionsv1.QuestionsAdminServiceClie
 		})
 
 		require.NoError(t, err)
-		q.Options = append(q.Options[1:])
+		q.Options = q.Options[1:]
 	})
 
 	t.Run("admin.DeleteQuestion: access token not provided", func(t *testing.T) {

@@ -59,6 +59,9 @@ func (s *Store) GetQuestionsBatch(ctx context.Context, filter *filter.QuestionsF
 	}
 
 	ids, count, err := s.cache.GetBatchCachedIDs(ctx, filter.Language, difficulties, filter.Categories, filter.Amount)
+	if err != nil {
+		s.logger.Debug("failed to get cached ids", zap.String("language", filter.Language), zap.Error(err))
+	}
 
 	var qs []*questions.Question
 	if count >= int(filter.Amount) {

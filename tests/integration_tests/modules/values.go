@@ -12,7 +12,7 @@ import (
 
 func prepare(t *testing.T, cfg *config.TestConfig) {
 	var err error
-	auth := jwt.NewService(cfg.ServiceConfig.JWT.Secret, cfg.ServiceConfig.JWT.AccessExpiration, cfg.ServiceConfig.JWT.RefreshExpiration)
+	auth := jwt.NewService(cfg.ServiceConfig.JWT)
 
 	adminToken, err = auth.GenerateToken("1", string(jwt.Admin))
 	require.NoError(t, err)

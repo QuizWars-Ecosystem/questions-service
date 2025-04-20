@@ -288,7 +288,7 @@ func (db *Database) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin
 	}
 
 	if !flag {
-		return apperrors.BadRequest(argumentsNotProvidedErr)
+		return apperrors.BadRequest(errArgumentsNotProvided)
 	}
 
 	query, args, err := builder.ToSql()
@@ -334,7 +334,7 @@ func (db *Database) UpdateQuestionOption(ctx context.Context, id uuid.UUID, req 
 	}
 
 	if !flag {
-		return apperrors.BadRequestHidden(argumentsNotProvidedErr, "arguments not provided")
+		return apperrors.BadRequestHidden(errArgumentsNotProvided, "arguments not provided")
 	}
 
 	query, args, err := builder.ToSql()
