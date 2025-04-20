@@ -3,33 +3,31 @@ package config
 import (
 	"time"
 
+	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
+	"github.com/QuizWars-Ecosystem/go-common/pkg/log"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
 )
 
 type Config struct {
-	config.DefaultServiceConfig
-	Postgres    PostgresConfig `envPrefix:"POSTGRES_"`
-	Redis       RedisConfig    `envPrefix:"REDIS_"`
-	StoreConfig StoreConfig    `envPrefix:"STORE_"`
-	JWT         JWTConfig      `envPrefix:"JWT_"`
+	*config.ServiceConfig `mapstructure:"service"`
+	Logger                *log.Config     `mapstructure:"logger"`
+	JWT                   *jwt.Config     `mapstructure:"jwt"`
+	Postgres              *PostgresConfig `mapstructure:"postgres"`
+	Redis                 *RedisConfig    `mapstructure:"redis"`
+	StoreConfig           *StoreConfig    `mapstructure:"store"`
 }
 
 type PostgresConfig struct {
-	URL string `env:"URL"`
+	URL string `mapstructure:"url"`
 }
 
 type RedisConfig struct {
-	URL string `env:"URL"`
+	URL string `mapstructure:"url"`
 }
 
 type StoreConfig struct {
-	WarmUp        bool          `env:"WARM_UP"`
-	WarmUpAmount  int           `env:"WARM_UP_AMOUNT"`
-	WarmUpTimeout time.Duration `env:"WARM_UP_TIMEOUT"`
-}
-
-type JWTConfig struct {
-	Secret            string        `env:"SECRET"`
-	AccessExpiration  time.Duration `env:"ACCESS_EXPIRATION"`
-	RefreshExpiration time.Duration `env:"REFRESH_EXPIRATION"`
+	WarmUp        bool          `mapstructure:"warm_up"`
+	WarmUpAmount  int           `mapstructure:"warm_up_amount"`
+	WarmUpTimeout time.Duration `mapstructure:"warm_up_timeout"`
 }

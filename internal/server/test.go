@@ -32,7 +32,7 @@ type TestServer struct {
 func NewTestServer(ctx context.Context, cfg *config.Config) (*TestServer, error) {
 	cl := closer.NewCloser()
 
-	logger := log.NewLogger(cfg.Local, cfg.LogLevel)
+	logger := log.NewLogger(cfg.Local, cfg.Logger.Level)
 
 	postgresOptions := clients.NewPostgresOptions(cfg.Postgres.URL)
 	postgresOptions.WithConnectTimeout(time.Second * 20)
@@ -49,8 +49,9 @@ func NewTestServer(ctx context.Context, cfg *config.Config) (*TestServer, error)
 		return nil, fmt.Errorf("error initializing redis client: %w", err)
 	}
 
-	storage := store.NewStore(postgresClient, redisClient, logger.Zap(), &cfg.StoreConfig)
-	jwtService := jwt.NewService(cfg.JWT.Secret, cfg.JWT.AccessExpiration, cfg.JWT.RefreshExpiration)
+	jwtService := jwt.NewService(cfg.JWT)
+
+	storage := store.NewStore(postgresClient, redisClient, logger.Zap(), cfg.StoreConfig)
 	srv := service.NewService(storage, logger.Zap())
 	hand := handler.NewHandler(srv, jwtService, logger.Zap())
 

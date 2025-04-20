@@ -7,6 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"go.uber.org/zap"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/config"
 	questions "github.com/QuizWars-Ecosystem/questions-service/internal/config"
@@ -14,18 +16,25 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load[questions.Config]()
+	path := os.Getenv("CONFIG_PATH")
+	if path == "" {
+		path = "app/config/config.yaml"
+	}
+
+	manager, err := config.NewManager[questions.Config](path)
 	if err != nil {
-		slog.Error("Error loading config: ", "error", err)
+		slog.Error("Error loading config", zap.String("path", path), zap.Error(err))
 		return
 	}
+
+	cfg := manager.Config()
 
 	startCtx, startCancel := context.WithTimeout(context.Background(), cfg.StartTimeout)
 	defer startCancel()
 
 	var srv abstractions.Server
 
-	srv, err = server.NewServer(startCtx, cfg)
+	srv, err = server.NewServer(startCtx, manager)
 	if err != nil {
 		slog.Error("Error starting server: ", "error", err)
 		return
@@ -38,7 +47,7 @@ func main() {
 		<-signalCh
 		slog.Info("Shutting down server...")
 
-		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), cfg.ShutdownTimeout)
+		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), cfg.StopTimeout)
 		defer shutdownCancel()
 
 		if err = srv.Shutdown(shutdownCtx); err != nil {

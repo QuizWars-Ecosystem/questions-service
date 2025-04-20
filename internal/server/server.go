@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"google.golang.org/grpc/reflection"
 	"net"
+
+	"google.golang.org/grpc/reflection"
 
 	"github.com/DavidMovas/gopherbox/pkg/closer"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/clients"
+	manager "github.com/QuizWars-Ecosystem/go-common/pkg/config"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/consul"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/log"
@@ -31,15 +33,19 @@ type Server struct {
 	listener   net.Listener
 	consul     *consul.Consul
 	logger     *log.Logger
-	cfg        *config.Config
+	manager    *manager.Manager[config.Config]
 	closer     *closer.Closer
 }
 
-func NewServer(ctx context.Context, cfg *config.Config) (*Server, error) {
+func NewServer(ctx context.Context, manager *manager.Manager[config.Config]) (*Server, error) {
 	cl := closer.NewCloser()
 
-	logger := log.NewLogger(cfg.Local, cfg.LogLevel)
+	cfg := manager.Config()
+
+	logger := log.NewLogger(cfg.Local, cfg.Logger.Level)
 	cl.PushIO(logger)
+
+	manager.Subscribe(logger.SectionKey(), func(cfg *config.Config) error { return logger.UpdateConfig(cfg.Logger) })
 
 	consulManager, err := consul.NewConsul(cfg.ConsulURL, cfg.Name, cfg.Address, cfg.GRPCPort, logger)
 	if err != nil {
@@ -61,8 +67,10 @@ func NewServer(ctx context.Context, cfg *config.Config) (*Server, error) {
 		return nil, fmt.Errorf("error initializing redis client: %w", err)
 	}
 
-	storage := store.NewStore(postgresClient, redisClient, logger.Zap(), &cfg.StoreConfig)
-	jwtService := jwt.NewService(cfg.JWT.Secret, cfg.JWT.AccessExpiration, cfg.JWT.RefreshExpiration)
+	jwtService := jwt.NewService(cfg.JWT)
+	manager.Subscribe(jwtService.SectionKey(), func(cfg *config.Config) error { return jwtService.UpdateConfig(cfg.JWT) })
+
+	storage := store.NewStore(postgresClient, redisClient, logger.Zap(), cfg.StoreConfig)
 	srv := service.NewService(storage, logger.Zap())
 	hand := handler.NewHandler(srv, jwtService, logger.Zap())
 
@@ -86,7 +94,7 @@ func NewServer(ctx context.Context, cfg *config.Config) (*Server, error) {
 		grpcServer: grpcServer,
 		consul:     consulManager,
 		logger:     logger,
-		cfg:        cfg,
+		manager:    manager,
 		closer:     cl,
 	}, nil
 }
@@ -94,12 +102,15 @@ func NewServer(ctx context.Context, cfg *config.Config) (*Server, error) {
 func (s *Server) Start() error {
 	z := s.logger.Zap()
 
-	z.Info("Starting server", zap.String("name", s.cfg.Name), zap.Int("port", s.cfg.GRPCPort))
+	cfg := s.manager.Config()
+	s.manager.Watch(z)
+
+	z.Info("Starting server", zap.String("name", cfg.Name), zap.Int("port", cfg.GRPCPort))
 
 	var err error
-	s.listener, err = net.Listen("tcp", fmt.Sprintf(":%d", s.cfg.GRPCPort))
+	s.listener, err = net.Listen("tcp", fmt.Sprintf(":%d", cfg.GRPCPort))
 	if err != nil {
-		z.Error("Failed to start listener", zap.String("name", s.cfg.Name), zap.Int("port", s.cfg.GRPCPort), zap.Error(err))
+		z.Error("Failed to start listener", zap.String("name", cfg.Name), zap.Int("port", cfg.GRPCPort), zap.Error(err))
 		return err
 	}
 
@@ -107,7 +118,7 @@ func (s *Server) Start() error {
 
 	err = s.consul.RegisterService()
 	if err != nil {
-		z.Error("Failed to register service in consul registry", zap.String("name", s.cfg.Name), zap.Error(err))
+		z.Error("Failed to register service in consul registry", zap.String("name", cfg.Name), zap.Error(err))
 		return err
 	}
 
@@ -116,7 +127,9 @@ func (s *Server) Start() error {
 
 func (s *Server) Shutdown(ctx context.Context) error {
 	z := s.logger.Zap()
-	z.Info("Shutting down server gracefully", zap.String("name", s.cfg.Name))
+	cfg := s.manager.Config()
+
+	z.Info("Shutting down server gracefully", zap.String("name", cfg.Name))
 
 	stopChan := make(chan struct{})
 	go func() {
