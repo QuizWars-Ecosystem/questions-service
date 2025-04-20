@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/QuizWars-Ecosystem/go-common/pkg/log"
 	"time"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
@@ -36,11 +37,16 @@ func NewTestConfig() *TestConfig {
 				AccessExpiration:  time.Hour,
 				RefreshExpiration: time.Hour,
 			},
+			Logger: &log.Config{
+				Level: "debug",
+			},
 			StoreConfig: &config.StoreConfig{
 				WarmUp:        true,
 				WarmUpAmount:  100,
 				WarmUpTimeout: time.Minute,
 			},
+			Postgres: &config.PostgresConfig{},
+			Redis:    &config.RedisConfig{},
 		},
 		Postgres: &postgresCfg,
 		Redis:    &redisCfg,
