@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/QuizWars-Ecosystem/go-common/pkg/log"
 	"time"
+
+	"github.com/QuizWars-Ecosystem/go-common/pkg/log"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
 
