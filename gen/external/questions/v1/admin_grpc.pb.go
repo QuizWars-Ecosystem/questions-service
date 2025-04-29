@@ -23,6 +23,7 @@ const (
 	QuestionsAdminService_GetFilteredQuestions_FullMethodName = "/questionsservice.v1.QuestionsAdminService/GetFilteredQuestions"
 	QuestionsAdminService_CreateCategory_FullMethodName       = "/questionsservice.v1.QuestionsAdminService/CreateCategory"
 	QuestionsAdminService_CreateQuestion_FullMethodName       = "/questionsservice.v1.QuestionsAdminService/CreateQuestion"
+	QuestionsAdminService_CreateQuestionOption_FullMethodName = "/questionsservice.v1.QuestionsAdminService/CreateQuestionOption"
 	QuestionsAdminService_UpdateCategory_FullMethodName       = "/questionsservice.v1.QuestionsAdminService/UpdateCategory"
 	QuestionsAdminService_UpdateQuestion_FullMethodName       = "/questionsservice.v1.QuestionsAdminService/UpdateQuestion"
 	QuestionsAdminService_UpdateQuestionOption_FullMethodName = "/questionsservice.v1.QuestionsAdminService/UpdateQuestionOption"
@@ -43,6 +44,8 @@ type QuestionsAdminServiceClient interface {
 	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
 	// Method lets create a question with options
 	CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method lets create and add a question's option to existing question
+	CreateQuestionOption(ctx context.Context, in *CreateQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Method for updating existing category
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Method for updating question data by it's ID
@@ -87,6 +90,16 @@ func (c *questionsAdminServiceClient) CreateQuestion(ctx context.Context, in *Cr
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, QuestionsAdminService_CreateQuestion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *questionsAdminServiceClient) CreateQuestionOption(ctx context.Context, in *CreateQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, QuestionsAdminService_CreateQuestionOption_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,6 +169,8 @@ type QuestionsAdminServiceServer interface {
 	CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error)
 	// Method lets create a question with options
 	CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error)
+	// Method lets create and add a question's option to existing question
+	CreateQuestionOption(context.Context, *CreateQuestionOptionRequest) (*emptypb.Empty, error)
 	// Method for updating existing category
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error)
 	// Method for updating question data by it's ID
@@ -183,6 +198,9 @@ func (UnimplementedQuestionsAdminServiceServer) CreateCategory(context.Context, 
 }
 func (UnimplementedQuestionsAdminServiceServer) CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestion not implemented")
+}
+func (UnimplementedQuestionsAdminServiceServer) CreateQuestionOption(context.Context, *CreateQuestionOptionRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestionOption not implemented")
 }
 func (UnimplementedQuestionsAdminServiceServer) UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCategory not implemented")
@@ -269,6 +287,24 @@ func _QuestionsAdminService_CreateQuestion_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QuestionsAdminServiceServer).CreateQuestion(ctx, req.(*CreateQuestionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QuestionsAdminService_CreateQuestionOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateQuestionOptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuestionsAdminServiceServer).CreateQuestionOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuestionsAdminService_CreateQuestionOption_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuestionsAdminServiceServer).CreateQuestionOption(ctx, req.(*CreateQuestionOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -381,6 +417,10 @@ var QuestionsAdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateQuestion",
 			Handler:    _QuestionsAdminService_CreateQuestion_Handler,
+		},
+		{
+			MethodName: "CreateQuestionOption",
+			Handler:    _QuestionsAdminService_CreateQuestionOption_Handler,
 		},
 		{
 			MethodName: "UpdateCategory",
