@@ -136,9 +136,11 @@ func (Sort) EnumDescriptor() ([]byte, []int) {
 	return file_external_questions_v1_admin_proto_rawDescGZIP(), []int{1}
 }
 
+// *
+// Represents a request argument for creating new category
 type CreateCategoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` // Field is a name for new category
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -180,9 +182,11 @@ func (x *CreateCategoryRequest) GetName() string {
 	return ""
 }
 
+// *
+// Represents a response result of a request for creating category
 type CreateCategoryResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // ID is ID of created category
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -224,15 +228,17 @@ func (x *CreateCategoryResponse) GetId() int32 {
 	return 0
 }
 
+// *
+// Represents a request argument for creating new questions with options
 type CreateQuestionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          Type                   `protobuf:"varint,1,opt,name=type,proto3,enum=questionsservice.v1.Type" json:"type,omitempty"`
-	Difficulty    Difficulty             `protobuf:"varint,2,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"`
-	CategoryId    int32                  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Text          string                 `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`
-	Options       []*Option              `protobuf:"bytes,5,rep,name=options,proto3" json:"options,omitempty"`
-	Language      string                 `protobuf:"bytes,6,opt,name=language,proto3" json:"language,omitempty"`
-	MediaUrl      *string                `protobuf:"bytes,7,opt,name=media_url,json=mediaUrl,proto3,oneof" json:"media_url,omitempty"`
+	Type          Type                   `protobuf:"varint,1,opt,name=type,proto3,enum=questionsservice.v1.Type" json:"type,omitempty"`                   // Question type
+	Difficulty    Difficulty             `protobuf:"varint,2,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"` // Difficulty of the question
+	CategoryId    int32                  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`                   // Question's category ID
+	Text          string                 `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`                                                  // Text of the question
+	Options       []*Option              `protobuf:"bytes,5,rep,name=options,proto3" json:"options,omitempty"`                                            // Possible answers for the question
+	Language      string                 `protobuf:"bytes,6,opt,name=language,proto3" json:"language,omitempty"`                                          // Language of the question
+	MediaUrl      *string                `protobuf:"bytes,7,opt,name=media_url,json=mediaUrl,proto3,oneof" json:"media_url,omitempty"`                    // Media URL if it has
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -316,6 +322,8 @@ func (x *CreateQuestionRequest) GetMediaUrl() string {
 	return ""
 }
 
+// *
+// Represents a argument of update category request
 type UpdateCategoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -368,14 +376,16 @@ func (x *UpdateCategoryRequest) GetName() string {
 	return ""
 }
 
+// *
+// Represents a request argument for update question data, allows edit types, difficulty, category, text and language
 type UpdateQuestionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Type          *Type                  `protobuf:"varint,2,opt,name=type,proto3,enum=questionsservice.v1.Type,oneof" json:"type,omitempty"`
-	Difficulty    *Difficulty            `protobuf:"varint,3,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty,oneof" json:"difficulty,omitempty"`
-	CategoryId    *int32                 `protobuf:"varint,4,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
-	Text          *string                `protobuf:"bytes,5,opt,name=text,proto3,oneof" json:"text,omitempty"`
-	Language      *string                `protobuf:"bytes,6,opt,name=language,proto3,oneof" json:"language,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                            // ID of the question
+	Type          *Type                  `protobuf:"varint,2,opt,name=type,proto3,enum=questionsservice.v1.Type,oneof" json:"type,omitempty"`                   // New type
+	Difficulty    *Difficulty            `protobuf:"varint,3,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty,oneof" json:"difficulty,omitempty"` // New difficulty
+	CategoryId    *int32                 `protobuf:"varint,4,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`                   // New category of the question
+	Text          *string                `protobuf:"bytes,5,opt,name=text,proto3,oneof" json:"text,omitempty"`                                                  // New text of the question
+	Language      *string                `protobuf:"bytes,6,opt,name=language,proto3,oneof" json:"language,omitempty"`                                          // New language for the language
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -452,11 +462,13 @@ func (x *UpdateQuestionRequest) GetLanguage() string {
 	return ""
 }
 
+// *
+// Represents a request argument for update question's option
 type UpdateQuestionOptionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Text          *string                `protobuf:"bytes,2,opt,name=text,proto3,oneof" json:"text,omitempty"`
-	IsCorrect     *bool                  `protobuf:"varint,3,opt,name=is_correct,json=isCorrect,proto3,oneof" json:"is_correct,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                       // ID of the option
+	Text          *string                `protobuf:"bytes,2,opt,name=text,proto3,oneof" json:"text,omitempty"`                             // New text for option
+	IsCorrect     *bool                  `protobuf:"varint,3,opt,name=is_correct,json=isCorrect,proto3,oneof" json:"is_correct,omitempty"` // Is it right option or not
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -512,6 +524,8 @@ func (x *UpdateQuestionOptionRequest) GetIsCorrect() bool {
 	return false
 }
 
+// *
+// Represent argument for deleting question request
 type DeleteQuestionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -556,6 +570,8 @@ func (x *DeleteQuestionRequest) GetId() string {
 	return ""
 }
 
+// *
+// Represent argument for deleting question's option request
 type DeleteQuestionOptionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -600,17 +616,19 @@ func (x *DeleteQuestionOptionRequest) GetId() string {
 	return ""
 }
 
+// *
+// Represents a componential argument of request for getting paginated questions with filters
 type GetFilteredQuestionsRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	Page             uint64                 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	Size             uint64                 `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
-	Order            *Order                 `protobuf:"varint,3,opt,name=order,proto3,enum=questionsservice.v1.Order,oneof" json:"order,omitempty"`
-	Sort             *Sort                  `protobuf:"varint,4,opt,name=sort,proto3,enum=questionsservice.v1.Sort,oneof" json:"sort,omitempty"`
-	TypeFilter       *TypeFilter            `protobuf:"bytes,5,opt,name=type_filter,json=typeFilter,proto3,oneof" json:"type_filter,omitempty"`
-	DifficultyFilter *DifficultyFilter      `protobuf:"bytes,6,opt,name=difficulty_filter,json=difficultyFilter,proto3,oneof" json:"difficulty_filter,omitempty"`
-	CategoryFilter   *CategoryFilter        `protobuf:"bytes,7,opt,name=category_filter,json=categoryFilter,proto3,oneof" json:"category_filter,omitempty"`
-	LanguageFilter   *LanguageFilter        `protobuf:"bytes,8,opt,name=language_filter,json=languageFilter,proto3,oneof" json:"language_filter,omitempty"`
-	CreateAtFilter   *CreatedAtFilter       `protobuf:"bytes,9,opt,name=create_at_filter,json=createAtFilter,proto3,oneof" json:"create_at_filter,omitempty"`
+	Page             uint64                 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`                                                      // Page of the requested content, by default must me 1
+	Size             uint64                 `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`                                                      // Amount of requesting questions
+	Order            *Order                 `protobuf:"varint,3,opt,name=order,proto3,enum=questionsservice.v1.Order,oneof" json:"order,omitempty"`               // What order should be
+	Sort             *Sort                  `protobuf:"varint,4,opt,name=sort,proto3,enum=questionsservice.v1.Sort,oneof" json:"sort,omitempty"`                  // Sort of the resulted questions
+	TypeFilter       *TypeFilter            `protobuf:"bytes,5,opt,name=type_filter,json=typeFilter,proto3,oneof" json:"type_filter,omitempty"`                   // What type of question should be
+	DifficultyFilter *DifficultyFilter      `protobuf:"bytes,6,opt,name=difficulty_filter,json=difficultyFilter,proto3,oneof" json:"difficulty_filter,omitempty"` // Desired difficulty of questions
+	CategoryFilter   *CategoryFilter        `protobuf:"bytes,7,opt,name=category_filter,json=categoryFilter,proto3,oneof" json:"category_filter,omitempty"`       // Desired category
+	LanguageFilter   *LanguageFilter        `protobuf:"bytes,8,opt,name=language_filter,json=languageFilter,proto3,oneof" json:"language_filter,omitempty"`       // What language of questions
+	CreateAtFilter   *CreatedAtFilter       `protobuf:"bytes,9,opt,name=create_at_filter,json=createAtFilter,proto3,oneof" json:"create_at_filter,omitempty"`     // When questions were created
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -708,14 +726,16 @@ func (x *GetFilteredQuestionsRequest) GetCreateAtFilter() *CreatedAtFilter {
 	return nil
 }
 
+// *
+// Represents a response of requested, filtered and paginated questions
 type GetFilteredQuestionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Questions     []*Question            `protobuf:"bytes,1,rep,name=questions,proto3" json:"questions,omitempty"`
-	Page          uint64                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Size          uint64                 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
-	Order         Order                  `protobuf:"varint,4,opt,name=order,proto3,enum=questionsservice.v1.Order" json:"order,omitempty"`
-	Sort          Sort                   `protobuf:"varint,5,opt,name=sort,proto3,enum=questionsservice.v1.Sort" json:"sort,omitempty"`
-	Amount        int64                  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`
+	Questions     []*Question            `protobuf:"bytes,1,rep,name=questions,proto3" json:"questions,omitempty"`                         // List of resulted questions
+	Page          uint64                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`                                  // Current requested page
+	Size          uint64                 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`                                  // Amount of current
+	Order         Order                  `protobuf:"varint,4,opt,name=order,proto3,enum=questionsservice.v1.Order" json:"order,omitempty"` // Order of resulted questions list
+	Sort          Sort                   `protobuf:"varint,5,opt,name=sort,proto3,enum=questionsservice.v1.Sort" json:"sort,omitempty"`    // Sort of resulted questions list
+	Amount        int64                  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`                              // Total amount of possible to request with the same request filter questions
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -794,7 +814,7 @@ func (x *GetFilteredQuestionsResponse) GetAmount() int64 {
 
 type TypeFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Types         []Type                 `protobuf:"varint,1,rep,packed,name=types,proto3,enum=questionsservice.v1.Type" json:"types,omitempty"`
+	Types         []Type                 `protobuf:"varint,1,rep,packed,name=types,proto3,enum=questionsservice.v1.Type" json:"types,omitempty"` // List of desired questions types
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -838,7 +858,7 @@ func (x *TypeFilter) GetTypes() []Type {
 
 type DifficultyFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Difficulties  []Difficulty           `protobuf:"varint,1,rep,packed,name=difficulties,proto3,enum=questionsservice.v1.Difficulty" json:"difficulties,omitempty"`
+	Difficulties  []Difficulty           `protobuf:"varint,1,rep,packed,name=difficulties,proto3,enum=questionsservice.v1.Difficulty" json:"difficulties,omitempty"` // List of desired questions difficulties
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -882,7 +902,7 @@ func (x *DifficultyFilter) GetDifficulties() []Difficulty {
 
 type CategoryFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Categories    []int32                `protobuf:"varint,1,rep,packed,name=categories,proto3" json:"categories,omitempty"`
+	Categories    []int32                `protobuf:"varint,1,rep,packed,name=categories,proto3" json:"categories,omitempty"` // List of desired questions categories
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -926,7 +946,7 @@ func (x *CategoryFilter) GetCategories() []int32 {
 
 type LanguageFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Languages     []string               `protobuf:"bytes,1,rep,name=languages,proto3" json:"languages,omitempty"`
+	Languages     []string               `protobuf:"bytes,1,rep,name=languages,proto3" json:"languages,omitempty"` // List of desired questions languages
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -970,8 +990,8 @@ func (x *LanguageFilter) GetLanguages() []string {
 
 type CreatedAtFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	From          *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	To            *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=to,proto3" json:"to,omitempty"`
+	From          *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"` // Start interval date for desired question
+	To            *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=to,proto3" json:"to,omitempty"`     // End interval date for desired question
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

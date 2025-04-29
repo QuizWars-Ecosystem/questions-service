@@ -32,13 +32,25 @@ const (
 // UsersSocialServiceClient is the client API for UsersSocialService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+// Users Social Service allow users be active with others users
 type UsersSocialServiceClient interface {
+	// Method for asking another user be friends. It adds requested user request message on friendship
 	AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method that set message on friendship active and adds users in shared relation (make users mutual related)
 	AcceptFriend(ctx context.Context, in *AcceptFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method that reject message on friendship from requester
 	RejectFriend(ctx context.Context, in *RejectFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method removes already created and active friendship between two users
 	RemoveFriend(ctx context.Context, in *RemoveFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for get all relations for specified user, result is users list with any relation (active/inactive)
 	ListFriends(ctx context.Context, in *ListFriendsRequest, opts ...grpc.CallOption) (*FriendsList, error)
+	// Method for blocking friend (they will be not able to communicate witch each other)
+	// Auth: Self
 	BlockFriend(ctx context.Context, in *BlockFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method is reverse action of blocking. Allows user remove friend from black list
+	// Auth: Self
 	UnblockFriend(ctx context.Context, in *UnblockFriendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -123,13 +135,25 @@ func (c *usersSocialServiceClient) UnblockFriend(ctx context.Context, in *Unbloc
 // UsersSocialServiceServer is the server API for UsersSocialService service.
 // All implementations should embed UnimplementedUsersSocialServiceServer
 // for forward compatibility.
+//
+// *
+// Users Social Service allow users be active with others users
 type UsersSocialServiceServer interface {
+	// Method for asking another user be friends. It adds requested user request message on friendship
 	AddFriend(context.Context, *AddFriendRequest) (*emptypb.Empty, error)
+	// Method that set message on friendship active and adds users in shared relation (make users mutual related)
 	AcceptFriend(context.Context, *AcceptFriendRequest) (*emptypb.Empty, error)
+	// Method that reject message on friendship from requester
 	RejectFriend(context.Context, *RejectFriendRequest) (*emptypb.Empty, error)
+	// Method removes already created and active friendship between two users
 	RemoveFriend(context.Context, *RemoveFriendRequest) (*emptypb.Empty, error)
+	// Method for get all relations for specified user, result is users list with any relation (active/inactive)
 	ListFriends(context.Context, *ListFriendsRequest) (*FriendsList, error)
+	// Method for blocking friend (they will be not able to communicate witch each other)
+	// Auth: Self
 	BlockFriend(context.Context, *BlockFriendRequest) (*emptypb.Empty, error)
+	// Method is reverse action of blocking. Allows user remove friend from black list
+	// Auth: Self
 	UnblockFriend(context.Context, *UnblockFriendRequest) (*emptypb.Empty, error)
 }
 

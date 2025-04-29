@@ -30,11 +30,19 @@ const (
 // UsersAuthServiceClient is the client API for UsersAuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+// User Auth Service manage of user's register, logging and logout in system
 type UsersAuthServiceClient interface {
+	// Method for register new user in system, all filed are required. Returns created user profile on success and JWT token for usage
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	// Allow already registered users login in system using email or username an password. Returns user profile and JWT token
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	// Logout method mark user profile inactive in system and update git last login date. Can be use by user or client
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// UNIMPLEMENTED - Allow register of login users using OAuth2 tools. Returns user profile, JWT token and bool flag if user is new
 	OAuthLogin(ctx context.Context, in *OAuthLoginRequest, opts ...grpc.CallOption) (*OAuthLoginResponse, error)
+	// UNIMPLEMENTED - Allow already registered user connect system profile with his account that provides OAuth2 tools
 	LinkOAuthProvider(ctx context.Context, in *LinkOAuthProviderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -99,11 +107,19 @@ func (c *usersAuthServiceClient) LinkOAuthProvider(ctx context.Context, in *Link
 // UsersAuthServiceServer is the server API for UsersAuthService service.
 // All implementations should embed UnimplementedUsersAuthServiceServer
 // for forward compatibility.
+//
+// *
+// User Auth Service manage of user's register, logging and logout in system
 type UsersAuthServiceServer interface {
+	// Method for register new user in system, all filed are required. Returns created user profile on success and JWT token for usage
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	// Allow already registered users login in system using email or username an password. Returns user profile and JWT token
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	// Logout method mark user profile inactive in system and update git last login date. Can be use by user or client
 	Logout(context.Context, *LogoutRequest) (*emptypb.Empty, error)
+	// UNIMPLEMENTED - Allow register of login users using OAuth2 tools. Returns user profile, JWT token and bool flag if user is new
 	OAuthLogin(context.Context, *OAuthLoginRequest) (*OAuthLoginResponse, error)
+	// UNIMPLEMENTED - Allow already registered user connect system profile with his account that provides OAuth2 tools
 	LinkOAuthProvider(context.Context, *LinkOAuthProviderRequest) (*emptypb.Empty, error)
 }
 

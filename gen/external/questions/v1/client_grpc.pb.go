@@ -26,7 +26,11 @@ const (
 // QuestionsClientServiceClient is the client API for QuestionsClientService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+// Questions Client Service provides methods for clients
 type QuestionsClientServiceClient interface {
+	// Method allows get all existing categories
 	GetCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetCategoriesResponse, error)
 }
 
@@ -51,7 +55,11 @@ func (c *questionsClientServiceClient) GetCategories(ctx context.Context, in *em
 // QuestionsClientServiceServer is the server API for QuestionsClientService service.
 // All implementations should embed UnimplementedQuestionsClientServiceServer
 // for forward compatibility.
+//
+// *
+// Questions Client Service provides methods for clients
 type QuestionsClientServiceServer interface {
+	// Method allows get all existing categories
 	GetCategories(context.Context, *emptypb.Empty) (*GetCategoriesResponse, error)
 }
 

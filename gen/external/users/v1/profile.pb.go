@@ -22,6 +22,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// *
+// Represents request argument for getting user profile. Required on of identifier
 type GetProfileRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Identifier:
@@ -104,6 +106,9 @@ func (*GetProfileRequest_UserId) isGetProfileRequest_Identifier() {}
 
 func (*GetProfileRequest_Username) isGetProfileRequest_Identifier() {}
 
+// *
+// Represents request result of getting user profile. Contain one of possible data. Profile what can be requester only his owner
+// or User (short profile) what can be requested anyone
 type GetProfileResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Data:
@@ -186,6 +191,9 @@ func (*GetProfileResponse_Profile) isGetProfileResponse_Data() {}
 
 func (*GetProfileResponse_User) isGetProfileResponse_Data() {}
 
+// *
+// Represents request argument for update some user's account data. User id always required, any others files are optional.
+// They can be provided seperated or in one message
 type UpdateProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -238,6 +246,8 @@ func (x *UpdateProfileRequest) GetUsername() string {
 	return ""
 }
 
+// *
+// Represents request argument for set new profile's avatar id. User id always required
 type UpdateAvatarRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -290,6 +300,8 @@ func (x *UpdateAvatarRequest) GetAvatarId() int32 {
 	return 0
 }
 
+// *
+// Represents request message for reset user's profile password. User id always required
 type ChangePasswordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -342,6 +354,8 @@ func (x *ChangePasswordRequest) GetPassword() string {
 	return ""
 }
 
+// *
+// Message that required user id for mark his account as deleted in system
 type DeleteAccountRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`

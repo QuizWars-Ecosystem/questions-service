@@ -30,11 +30,24 @@ const (
 // UsersProfileServiceClient is the client API for UsersProfileService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+// User Profile Service contain methods for self manage user profile
 type UsersProfileServiceClient interface {
+	// Method allow get existing user profile user his id or username. For self profile request user get more infirmation, for side user less
+	// Auth: Self/User
 	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error)
+	// Method allow user update his account
+	// Auth: Self
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method allow user update hiw profile avatar
+	// Auth: Self
 	UpdateAvatar(ctx context.Context, in *UpdateAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method allow user reset his password
+	// Auth: Self
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method allow user delete his account (not fully)
+	// Auth: Self
 	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -99,11 +112,24 @@ func (c *usersProfileServiceClient) DeleteAccount(ctx context.Context, in *Delet
 // UsersProfileServiceServer is the server API for UsersProfileService service.
 // All implementations should embed UnimplementedUsersProfileServiceServer
 // for forward compatibility.
+//
+// *
+// User Profile Service contain methods for self manage user profile
 type UsersProfileServiceServer interface {
+	// Method allow get existing user profile user his id or username. For self profile request user get more infirmation, for side user less
+	// Auth: Self/User
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error)
+	// Method allow user update his account
+	// Auth: Self
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*emptypb.Empty, error)
+	// Method allow user update hiw profile avatar
+	// Auth: Self
 	UpdateAvatar(context.Context, *UpdateAvatarRequest) (*emptypb.Empty, error)
+	// Method allow user reset his password
+	// Auth: Self
 	ChangePassword(context.Context, *ChangePasswordRequest) (*emptypb.Empty, error)
+	// Method allow user delete his account (not fully)
+	// Auth: Self
 	DeleteAccount(context.Context, *DeleteAccountRequest) (*emptypb.Empty, error)
 }
 

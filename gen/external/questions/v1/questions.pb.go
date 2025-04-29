@@ -21,12 +21,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// *
+// Represents a light filter for getting desired questions
 type GetQuestionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Difficulty    Difficulty             `protobuf:"varint,1,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"`
-	Language      string                 `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`
-	CategoryId    int32                  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Amount        int32                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Difficulty    Difficulty             `protobuf:"varint,1,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"` // Desired difficulty
+	Language      string                 `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`                                          // Desired question language
+	CategoryId    int32                  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`                   // Desired question category id
+	Amount        int32                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`                                             // Amount of desired questions
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -89,14 +91,16 @@ func (x *GetQuestionsRequest) GetAmount() int32 {
 	return 0
 }
 
+// *
+// Represents a heavy filtered request for getting questions
 type GetQuestionBatchRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Types         []Type                 `protobuf:"varint,1,rep,packed,name=types,proto3,enum=questionsservice.v1.Type" json:"types,omitempty"`
-	Sources       []Source               `protobuf:"varint,2,rep,packed,name=sources,proto3,enum=questionsservice.v1.Source" json:"sources,omitempty"`
-	Difficulties  []Difficulty           `protobuf:"varint,3,rep,packed,name=difficulties,proto3,enum=questionsservice.v1.Difficulty" json:"difficulties,omitempty"`
-	CategoriesIds []int32                `protobuf:"varint,4,rep,packed,name=categories_ids,json=categoriesIds,proto3" json:"categories_ids,omitempty"`
-	Language      string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty"`
-	Amount        int32                  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`
+	Types         []Type                 `protobuf:"varint,1,rep,packed,name=types,proto3,enum=questionsservice.v1.Type" json:"types,omitempty"`                     // List of desired question's types
+	Sources       []Source               `protobuf:"varint,2,rep,packed,name=sources,proto3,enum=questionsservice.v1.Source" json:"sources,omitempty"`               // List of desired questions' sources
+	Difficulties  []Difficulty           `protobuf:"varint,3,rep,packed,name=difficulties,proto3,enum=questionsservice.v1.Difficulty" json:"difficulties,omitempty"` // List of desired question's difficulties
+	CategoriesIds []int32                `protobuf:"varint,4,rep,packed,name=categories_ids,json=categoriesIds,proto3" json:"categories_ids,omitempty"`              // List of desired question's categories ids
+	Language      string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty"`                                                     // Language of requesting question
+	Amount        int32                  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`                                                        // Amount of desired questions
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -173,9 +177,11 @@ func (x *GetQuestionBatchRequest) GetAmount() int32 {
 	return 0
 }
 
+// *
+// Represents of requested, filtered questions list
 type QuestionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Questions     []*Question            `protobuf:"bytes,1,rep,name=questions,proto3" json:"questions,omitempty"`
+	Questions     []*Question            `protobuf:"bytes,1,rep,name=questions,proto3" json:"questions,omitempty"` // List of resulted questions
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

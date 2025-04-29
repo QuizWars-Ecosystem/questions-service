@@ -25,10 +25,10 @@ const (
 type Status int32
 
 const (
-	Status_STATUS_UNSPECIFIED Status = 0
-	Status_STATUS_PENDING     Status = 1
-	Status_STATUS_ACCEPTED    Status = 2
-	Status_STATUS_BLOCKED     Status = 3
+	Status_STATUS_UNSPECIFIED Status = 0 // Is technical status
+	Status_STATUS_PENDING     Status = 1 // Means that requested waiting for recipient action
+	Status_STATUS_ACCEPTED    Status = 2 // Means that friendship is active for both users
+	Status_STATUS_BLOCKED     Status = 3 // Means that one of friend did block another and friendship exists but is inactive
 )
 
 // Enum value maps for Status.
@@ -74,16 +74,18 @@ func (Status) EnumDescriptor() ([]byte, []int) {
 	return file_external_users_v1_shared_proto_rawDescGZIP(), []int{0}
 }
 
+// *
+// Message represents user profile that can be shown only for his owner
 type Profile struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	Rating        int32                  `protobuf:"varint,5,opt,name=rating,proto3" json:"rating,omitempty"`
-	Coins         int64                  `protobuf:"varint,6,opt,name=coins,proto3" json:"coins,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                              // User id is actually UUID
+	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`                 // Is a id of avatars preset
+	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`                                  // Username is a string, no longer then 32 char
+	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`                                        // Email is a string, no longer then 128 char
+	Rating        int32                  `protobuf:"varint,5,opt,name=rating,proto3" json:"rating,omitempty"`                                     // Is a int filed that represents user rating
+	Coins         int64                  `protobuf:"varint,6,opt,name=coins,proto3" json:"coins,omitempty"`                                       // Is a int value that represents amount of user's coins
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`               // Is a date when user was registered, cannot be null
+	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"` // Is a date when user was last active, can be null
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -174,14 +176,16 @@ func (x *Profile) GetLastLoginAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// *
+// Message represents user profile that can be shown anyone
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	Rating        int32                  `protobuf:"varint,4,opt,name=rating,proto3" json:"rating,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                              // User id is actually UUID
+	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`                 // Is a id of avatars preset
+	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`                                  // Username is a string, no longer then 32 char
+	Rating        int32                  `protobuf:"varint,4,opt,name=rating,proto3" json:"rating,omitempty"`                                     // Is a int filed that represents user rating
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`               // Is a date when user was registered, cannot be null
+	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"` // Is a date when user was last active, can be null
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -258,17 +262,19 @@ func (x *User) GetLastLoginAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// *
+// Message represents user profile that can be shown only admin
 type UserAdmin struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	Rating        int32                  `protobuf:"varint,5,opt,name=rating,proto3" json:"rating,omitempty"`
-	Coins         int64                  `protobuf:"varint,6,opt,name=coins,proto3" json:"coins,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"`
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                              // User id is actually UUID
+	AvatarId      int32                  `protobuf:"varint,2,opt,name=avatar_id,json=avatarId,proto3" json:"avatar_id,omitempty"`                 // Is a id of avatars preset
+	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`                                  // Username is a string, no longer then 32 char
+	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`                                        // Email is a string, no longer then 128 char
+	Rating        int32                  `protobuf:"varint,5,opt,name=rating,proto3" json:"rating,omitempty"`                                     // Is a int filed that represents user rating
+	Coins         int64                  `protobuf:"varint,6,opt,name=coins,proto3" json:"coins,omitempty"`                                       // Is a int value that represents amount of user's coins
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`               // Is a date when user was registered, cannot be null
+	LastLoginAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3,oneof" json:"last_login_at,omitempty"` // Is a date when user was last active, can be null
+	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`         // Is a date when user profile was deleted by owner or banned by admin
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -366,6 +372,8 @@ func (x *UserAdmin) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// *
+// Message represents user's friends, actually is a list of user profiles with friendship status
 type FriendsList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Friends       []*Friend              `protobuf:"bytes,1,rep,name=friends,proto3" json:"friends,omitempty"`
@@ -412,8 +420,8 @@ func (x *FriendsList) GetFriends() []*Friend {
 
 type Friend struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
-	Status        Status                 `protobuf:"varint,2,opt,name=status,proto3,enum=usersservice.v1.Status" json:"status,omitempty"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`                                  // A user that interact with another
+	Status        Status                 `protobuf:"varint,2,opt,name=status,proto3,enum=usersservice.v1.Status" json:"status,omitempty"` // Status of friendship, this is shared status, it means if one person accepted request on fiendship, it will be accepted for both
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

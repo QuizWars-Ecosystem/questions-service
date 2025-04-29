@@ -33,14 +33,25 @@ const (
 // QuestionsAdminServiceClient is the client API for QuestionsAdminService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+// Questions Admin Service provides methods for admin's access and management
 type QuestionsAdminServiceClient interface {
+	// Method for getting paginated list of questions that can be requested with filters
 	GetFilteredQuestions(ctx context.Context, in *GetFilteredQuestionsRequest, opts ...grpc.CallOption) (*GetFilteredQuestionsResponse, error)
+	// Method for creating new category
 	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
+	// Method lets create a question with options
 	CreateQuestion(ctx context.Context, in *CreateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for updating existing category
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for updating question data by it's ID
 	UpdateQuestion(ctx context.Context, in *UpdateQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for updating question's options
 	UpdateQuestionOption(ctx context.Context, in *UpdateQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for deleting a question from database
 	DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Method for deleting a question's options from database
 	DeleteQuestionOption(ctx context.Context, in *DeleteQuestionOptionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -135,14 +146,25 @@ func (c *questionsAdminServiceClient) DeleteQuestionOption(ctx context.Context, 
 // QuestionsAdminServiceServer is the server API for QuestionsAdminService service.
 // All implementations should embed UnimplementedQuestionsAdminServiceServer
 // for forward compatibility.
+//
+// *
+// Questions Admin Service provides methods for admin's access and management
 type QuestionsAdminServiceServer interface {
+	// Method for getting paginated list of questions that can be requested with filters
 	GetFilteredQuestions(context.Context, *GetFilteredQuestionsRequest) (*GetFilteredQuestionsResponse, error)
+	// Method for creating new category
 	CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error)
+	// Method lets create a question with options
 	CreateQuestion(context.Context, *CreateQuestionRequest) (*emptypb.Empty, error)
+	// Method for updating existing category
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*emptypb.Empty, error)
+	// Method for updating question data by it's ID
 	UpdateQuestion(context.Context, *UpdateQuestionRequest) (*emptypb.Empty, error)
+	// Method for updating question's options
 	UpdateQuestionOption(context.Context, *UpdateQuestionOptionRequest) (*emptypb.Empty, error)
+	// Method for deleting a question from database
 	DeleteQuestion(context.Context, *DeleteQuestionRequest) (*emptypb.Empty, error)
+	// Method for deleting a question's options from database
 	DeleteQuestionOption(context.Context, *DeleteQuestionOptionRequest) (*emptypb.Empty, error)
 }
 
