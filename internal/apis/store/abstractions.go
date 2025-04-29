@@ -17,6 +17,7 @@ type IStore interface {
 	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
 	SaveCategory(ctx context.Context, name string) (int32, error)
 	SaveQuestion(ctx context.Context, question *questions.Hashed) error
+	SaveQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error
 	UpdateCategory(ctx context.Context, id int32, name string) error
 	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error
 	UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error
@@ -36,8 +37,11 @@ type IClientDatabase interface {
 
 type IAdminDatabase interface {
 	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
+	GetCategoryByID(ctx context.Context, id int32) (*questions.Category, error)
+	GetCategoryByName(ctx context.Context, name string) (*questions.Category, error)
 	SaveCategory(ctx context.Context, name string) (int32, error)
 	SaveQuestion(ctx context.Context, question *questions.Hashed) error
+	SaveQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error
 	UpdateCategory(ctx context.Context, id int32, name string) error
 	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error
 	UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error
@@ -55,4 +59,6 @@ type ICache interface {
 	GetCachedIDs(ctx context.Context, language, difficulty string, categoryID, amount int32) ([]uuid.UUID, int, error)
 	GetBatchCachedIDs(ctx context.Context, language string, difficulties []string, categoryIDs []int32, amount int32) ([]uuid.UUID, int, error)
 	AddCachedIDs(ctx context.Context, metas []*questions.Meta, timeout time.Duration) error
+	GetCategory(ctx context.Context, id int32) (*questions.Category, error)
+	AddCategory(ctx context.Context, category *questions.Category) error
 }
