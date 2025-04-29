@@ -24,7 +24,7 @@ func NewStore(pool *pgxpool.Pool, client abstractions.RedisClient, logger *zap.L
 	if cfg.WarmUp {
 		go func() {
 			if err := store.warmUpStore(cfg.WarmUpAmount, cfg.WarmUpTimeout); err != nil {
-				store.logger.Warn("failed to warm up store", zap.Error(err))
+				logger.Warn("failed to warm up store", zap.Error(err))
 			}
 		}()
 	}
