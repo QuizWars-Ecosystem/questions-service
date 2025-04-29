@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"errors"
+
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 
 	"go.uber.org/zap"
@@ -45,7 +46,6 @@ func (s *Store) SaveQuestion(ctx context.Context, question *questions.Hashed) er
 		category, err = s.db.GetCategoryByID(ctx, question.Category.ID)
 		if errors.Is(err, apperror) || category == nil {
 			question.Category.ID, err = s.db.SaveCategory(ctx, question.Category.Name)
-
 			if err != nil {
 				s.logger.Error("failed to save category", zap.Error(err))
 				return err

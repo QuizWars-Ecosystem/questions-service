@@ -3,9 +3,10 @@ package admin
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/google/uuid"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"

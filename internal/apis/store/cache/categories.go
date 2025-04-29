@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"time"
+
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 	"github.com/redis/go-redis/v9"
-	"time"
 )
 
 func (c *Cache) GetCategory(ctx context.Context, id int32) (*questions.Category, error) {
