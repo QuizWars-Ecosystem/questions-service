@@ -85,6 +85,30 @@ func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.Creat
 	return Empty, nil
 }
 
+func (h *Handler) CreateQuestionOption(ctx context.Context, request *questionsv1.CreateQuestionOptionRequest) (*emptypb.Empty, error) {
+	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := abstractions.MakeRequest[admin.CreateQuestionOptionRequest](request)
+	if err != nil {
+		return nil, err
+	}
+
+	questionID, err := uuid.Parse(request.GetQuestionId())
+	if err != nil {
+		return nil, apperrors.BadRequestHidden(err, "provided wrong uuid format")
+	}
+
+	err = h.service.CreateQuestionOption(ctx, questionID, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return Empty, nil
+}
+
 func (h *Handler) UpdateCategory(ctx context.Context, request *questionsv1.UpdateCategoryRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {

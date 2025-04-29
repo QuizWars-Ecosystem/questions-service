@@ -9,6 +9,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var _ IStore = (*Store)(nil)
+
 type Store struct {
 	db     IDatabase
 	cache  ICache

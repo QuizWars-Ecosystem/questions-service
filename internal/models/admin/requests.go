@@ -3,6 +3,7 @@ package admin
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"github.com/google/uuid"
 	"strings"
 	"time"
 
@@ -63,10 +64,28 @@ func (q QuestionsFilter) Request(req *questionsv1.GetFilteredQuestionsRequest) (
 }
 
 func offsetLimit(page, size uint64) (uint64, uint64) {
+	if page <= 0 {
+		page = 1
+	}
+
+	if size < 10 {
+		size = 10
+	}
+
 	offset := (page - 1) * size
 	limit := size
 
 	return offset, limit
+}
+
+var _ abstractions.Requestable[CreateQuestionOptionRequest, *questionsv1.CreateQuestionOptionRequest] = (*CreateQuestionOptionRequest)(nil)
+
+func (c CreateQuestionOptionRequest) Request(req *questionsv1.CreateQuestionOptionRequest) (*CreateQuestionOptionRequest, error) {
+	c.ID = uuid.New()
+	c.Text = req.Text
+	c.IsCorrect = req.IsCorrect
+
+	return &c, nil
 }
 
 var _ abstractions.Requestable[UpdateQuestionRequest, *questionsv1.UpdateQuestionRequest] = (*UpdateQuestionRequest)(nil)

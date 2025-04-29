@@ -251,6 +251,57 @@ func AdminServiceTest(t *testing.T, client questionsv1.QuestionsAdminServiceClie
 		}
 	})
 
+	t.Run("admin.CreateQuestionOption: access token not provided", func(t *testing.T) {
+		_, err := client.CreateQuestionOption(emptyCtx, &questionsv1.CreateQuestionOptionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthAccessTokenNotProvidedError)
+	})
+
+	t.Run("admin.CreateQuestionOption: invalid token", func(t *testing.T) {
+		_, err := client.CreateQuestionOption(invalidCtx, &questionsv1.CreateQuestionOptionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthInvalidTokenError)
+	})
+
+	t.Run("admin.CreateQuestionOption: permission denied", func(t *testing.T) {
+		_, err := client.CreateQuestionOption(userCtx, &questionsv1.CreateQuestionOptionRequest{})
+
+		require.Error(t, err)
+		testerror.RequireForbiddenError(t, err, jwt.AuthPermissionDeniedError)
+	})
+
+	t.Run("admin.CreateQuestionOption: not found", func(t *testing.T) {
+		testID := uuid.New().String()
+		_, err := client.CreateQuestionOption(adminCtx, &questionsv1.CreateQuestionOptionRequest{
+			QuestionId: testID,
+			Text:       "New Text",
+			IsCorrect:  false,
+		})
+
+		require.Error(t, err)
+		testerror.RequireNotFoundError(t, err, "question", "id", testID)
+	})
+
+	t.Run("admin.CreateQuestionOption: successful", func(t *testing.T) {
+		question := questionsMap[countriesRusQuestionsKey]
+
+		req := &questionsv1.CreateQuestionOptionRequest{
+			QuestionId: question.Id,
+			Text:       "New option text",
+			IsCorrect:  false,
+		}
+
+		_, err := client.CreateQuestionOption(adminCtx, req)
+
+		require.NoError(t, err)
+		question.Options = append(question.Options, &questionsv1.Option{
+			Text:      req.Text,
+			IsCorrect: req.IsCorrect,
+		})
+	})
+
 	t.Run("admin.UpdateQuestion: access token not provided", func(t *testing.T) {
 		_, err := client.UpdateQuestion(emptyCtx, &questionsv1.UpdateQuestionRequest{})
 
