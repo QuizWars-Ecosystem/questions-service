@@ -26,8 +26,14 @@ const (
 // QuestionsServiceClient is the client API for QuestionsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// *
+//
+//	Questions service is a service for getting desired questions
 type QuestionsServiceClient interface {
+	// Method for getting questions with light filter
 	GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*QuestionsResponse, error)
+	// Method for getting batch of questions with heavy filter
 	GetQuestionBatch(ctx context.Context, in *GetQuestionBatchRequest, opts ...grpc.CallOption) (*QuestionsResponse, error)
 }
 
@@ -62,8 +68,14 @@ func (c *questionsServiceClient) GetQuestionBatch(ctx context.Context, in *GetQu
 // QuestionsServiceServer is the server API for QuestionsService service.
 // All implementations should embed UnimplementedQuestionsServiceServer
 // for forward compatibility.
+//
+// *
+//
+//	Questions service is a service for getting desired questions
 type QuestionsServiceServer interface {
+	// Method for getting questions with light filter
 	GetQuestions(context.Context, *GetQuestionsRequest) (*QuestionsResponse, error)
+	// Method for getting batch of questions with heavy filter
 	GetQuestionBatch(context.Context, *GetQuestionBatchRequest) (*QuestionsResponse, error)
 }
 

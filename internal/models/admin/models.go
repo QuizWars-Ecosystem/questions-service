@@ -3,6 +3,8 @@ package admin
 import (
 	"time"
 
+	"github.com/google/uuid"
+
 	questionspb "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/questions"
 )
@@ -21,6 +23,12 @@ const (
 	ASC  Sort = "ASC"
 	DESC Sort = "DESC"
 )
+
+type CreateQuestionOptionRequest struct {
+	ID        uuid.UUID
+	Text      string
+	IsCorrect bool
+}
 
 type UpdateQuestionRequest struct {
 	Type       *questions.Type

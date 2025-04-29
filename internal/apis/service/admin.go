@@ -26,6 +26,10 @@ func (s *Service) CreateQuestion(ctx context.Context, req *questions.CreateQuest
 	return s.store.SaveQuestion(ctx, req.Hashed)
 }
 
+func (s *Service) CreateQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error {
+	return s.store.SaveQuestionOption(ctx, questionID, req)
+}
+
 func (s *Service) UpdateCategory(ctx context.Context, id int32, name string) error {
 	return s.store.UpdateCategory(ctx, id, name)
 }

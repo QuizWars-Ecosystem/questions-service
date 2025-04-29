@@ -2,6 +2,9 @@ package store
 
 import (
 	"context"
+	"errors"
+
+	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 
 	"go.uber.org/zap"
 
@@ -21,15 +24,62 @@ func (s *Store) GetFilteredQuestions(ctx context.Context, filter *admin.Question
 }
 
 func (s *Store) SaveCategory(ctx context.Context, name string) (int32, error) {
-	return s.db.SaveCategory(ctx, name)
+	id, err := s.db.SaveCategory(ctx, name)
+	if err != nil {
+		s.logger.Error("failed to save category", zap.Error(err))
+		return 0, err
+	}
+
+	err = s.cache.AddCategory(ctx, &questions.Category{ID: id, Name: name})
+	if err != nil {
+		s.logger.Error("failed to cache category", zap.Error(err))
+	}
+
+	return id, nil
 }
 
 func (s *Store) SaveQuestion(ctx context.Context, question *questions.Hashed) error {
+	category, err := s.cache.GetCategory(ctx, question.Category.ID)
+
+	var apperror *apperrors.Error
+	if errors.Is(err, apperror) || category == nil {
+		category, err = s.db.GetCategoryByID(ctx, question.Category.ID)
+		if errors.Is(err, apperror) || category == nil {
+			question.Category.ID, err = s.db.SaveCategory(ctx, question.Category.Name)
+			if err != nil {
+				s.logger.Error("failed to save category", zap.Error(err))
+				return err
+			}
+
+			err = s.cache.AddCategory(ctx, &question.Category)
+			if err != nil {
+				s.logger.Error("failed to cache category", zap.Error(err))
+			}
+		} else {
+			return err
+		}
+	}
+
 	return s.db.SaveQuestion(ctx, question)
 }
 
+func (s *Store) SaveQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error {
+	return s.db.SaveQuestionOption(ctx, questionID, req)
+}
+
 func (s *Store) UpdateCategory(ctx context.Context, id int32, name string) error {
-	return s.db.UpdateCategory(ctx, id, name)
+	err := s.db.UpdateCategory(ctx, id, name)
+	if err != nil {
+		s.logger.Error("failed to update category", zap.Error(err))
+		return err
+	}
+
+	err = s.cache.AddCategory(ctx, &questions.Category{ID: id, Name: name})
+	if err != nil {
+		s.logger.Error("failed to cache category", zap.Error(err))
+	}
+
+	return nil
 }
 
 func (s *Store) UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error {

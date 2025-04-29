@@ -7,6 +7,7 @@ import (
 
 const (
 	QuestionsCacheScheme = "questions:%s:%s:%d"
+	CategoryCacheScheme  = "category:%d"
 )
 
 func key(language, difficulty string, categoryID int32) string {
@@ -27,4 +28,8 @@ func keyList(language string, difficulties []string, categoryIDs []int32) []stri
 
 func destinationKey() string {
 	return fmt.Sprintf("temp:%d", time.Now().UnixMilli())
+}
+
+func categoryKey(categoryID int32) string {
+	return fmt.Sprintf(CategoryCacheScheme, categoryID)
 }

@@ -26,9 +26,9 @@ type Type int32
 
 const (
 	Type_TYPE_UNSPECIFIED Type = 0
-	Type_TYPE_SINGLE      Type = 1
-	Type_TYPE_MULTI       Type = 2
-	Type_TYPE_BETTING     Type = 3
+	Type_TYPE_SINGLE      Type = 1 // Question has definitely only one correct option
+	Type_TYPE_MULTI       Type = 2 // Question has one or more correct option
+	Type_TYPE_BETTING     Type = 3 // Question has ability make a bid on question answer
 )
 
 // Enum value maps for Type.
@@ -187,17 +187,19 @@ func (Difficulty) EnumDescriptor() ([]byte, []int) {
 	return file_external_questions_v1_shared_proto_rawDescGZIP(), []int{2}
 }
 
+// *
+// Message represents a question
 type Question struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Type          Type                   `protobuf:"varint,2,opt,name=type,proto3,enum=questionsservice.v1.Type" json:"type,omitempty"`
-	Source        Source                 `protobuf:"varint,3,opt,name=source,proto3,enum=questionsservice.v1.Source" json:"source,omitempty"`
-	Difficulty    Difficulty             `protobuf:"varint,4,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"`
-	Category      *Category              `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
-	Text          string                 `protobuf:"bytes,6,opt,name=text,proto3" json:"text,omitempty"`
-	Options       []*Option              `protobuf:"bytes,7,rep,name=options,proto3" json:"options,omitempty"`
-	Language      string                 `protobuf:"bytes,8,opt,name=language,proto3" json:"language,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                      // ID of question is UUID v4
+	Type          Type                   `protobuf:"varint,2,opt,name=type,proto3,enum=questionsservice.v1.Type" json:"type,omitempty"`                   // Type of question is a enum value
+	Source        Source                 `protobuf:"varint,3,opt,name=source,proto3,enum=questionsservice.v1.Source" json:"source,omitempty"`             // Source of question is a enum value
+	Difficulty    Difficulty             `protobuf:"varint,4,opt,name=difficulty,proto3,enum=questionsservice.v1.Difficulty" json:"difficulty,omitempty"` // Difficulty is a enum value
+	Category      *Category              `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`                                          // Category is a pair of id of category and it's name
+	Text          string                 `protobuf:"bytes,6,opt,name=text,proto3" json:"text,omitempty"`                                                  // Text of a question
+	Options       []*Option              `protobuf:"bytes,7,rep,name=options,proto3" json:"options,omitempty"`                                            // List of question options
+	Language      string                 `protobuf:"bytes,8,opt,name=language,proto3" json:"language,omitempty"`                                          // Language of a question
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                       // Date when a questing was added
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -295,11 +297,13 @@ func (x *Question) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// *
+// Message represents a question's option
 type Option struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
-	IsCorrect     bool                   `protobuf:"varint,3,opt,name=is_correct,json=isCorrect,proto3" json:"is_correct,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                 // ID of option is UUID v4
+	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`                             // Text of question option
+	IsCorrect     bool                   `protobuf:"varint,3,opt,name=is_correct,json=isCorrect,proto3" json:"is_correct,omitempty"` // Filed that shows is it correct answer or not
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -355,10 +359,12 @@ func (x *Option) GetIsCorrect() bool {
 	return false
 }
 
+// *
+// Message represents a category pf question
 type Category struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`    // ID is integer type
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // Name of category
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

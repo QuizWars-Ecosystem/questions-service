@@ -138,6 +138,54 @@ func (db *Database) GetFilteredQuestions(ctx context.Context, filter *admin.Ques
 	return qs, total, nil
 }
 
+func (db *Database) GetCategoryByID(ctx context.Context, id int32) (*questions.Category, error) {
+	builder := dbx.StatementBuilder.
+		Select("id", "name").
+		From("categories").
+		Where(squirrel.Eq{"id": id})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, apperrors.Internal(err)
+	}
+
+	var category questions.Category
+	err = db.pool.QueryRow(ctx, query, args...).Scan(&category.ID, &category.Name)
+
+	switch {
+	case dbx.IsNoRows(err):
+		return nil, apperrors.NotFound("category", "id", id)
+	case err != nil:
+		return nil, apperrors.Internal(err)
+	}
+
+	return &category, nil
+}
+
+func (db *Database) GetCategoryByName(ctx context.Context, name string) (*questions.Category, error) {
+	builder := dbx.StatementBuilder.
+		Select("id", "name").
+		From("categories").
+		Where(squirrel.Eq{"name": name})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, apperrors.Internal(err)
+	}
+
+	var category questions.Category
+	err = db.pool.QueryRow(ctx, query, args...).Scan(&category.ID, &category.Name)
+
+	switch {
+	case dbx.IsNoRows(err):
+		return nil, apperrors.NotFound("category", "name", name)
+	case err != nil:
+		return nil, apperrors.Internal(err)
+	}
+
+	return &category, nil
+}
+
 func (db *Database) SaveCategory(ctx context.Context, name string) (int32, error) {
 	builder := dbx.StatementBuilder.
 		Insert("categories").
@@ -220,6 +268,30 @@ func (db *Database) SaveQuestion(ctx context.Context, question *questions.Hashed
 	})
 	if err != nil {
 		db.logger.Warn("failed to save question", zap.Error(err))
+		return apperrors.Internal(err)
+	}
+
+	return nil
+}
+
+func (db *Database) SaveQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error {
+	builder := dbx.StatementBuilder.
+		Insert("question_options").
+		Columns("id", "question_id", "text", "is_correct").
+		Values(req.ID, questionID, req.Text, req.IsCorrect).
+		Suffix("ON CONFLICT (id, question_id) DO NOTHING")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return apperrors.Internal(err)
+	}
+
+	_, err = db.pool.Exec(ctx, query, args...)
+
+	switch {
+	case dbx.IsForeignKeyViolation(err, "question_id"):
+		return apperrors.NotFound("question", "id", questionID.String())
+	case err != nil:
 		return apperrors.Internal(err)
 	}
 

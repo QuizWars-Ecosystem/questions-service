@@ -18,12 +18,15 @@ type IService interface {
 	GetFilteredQuestions(ctx context.Context, filter *admin.QuestionsFilter) ([]*questions.Question, int, error)
 	CreateCategory(ctx context.Context, name string) (int32, error)
 	CreateQuestion(ctx context.Context, req *questions.CreateQuestionRequest) error
+	CreateQuestionOption(ctx context.Context, questionID uuid.UUID, req *admin.CreateQuestionOptionRequest) error
 	UpdateCategory(ctx context.Context, id int32, name string) error
 	UpdateQuestion(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionRequest) error
 	UpdateQuestionOption(ctx context.Context, id uuid.UUID, req *admin.UpdateQuestionOptionRequest) error
 	DeleteQuestion(ctx context.Context, id uuid.UUID) error
 	DeleteQuestionOption(ctx context.Context, id uuid.UUID) error
 }
+
+var _ IService = (*Service)(nil)
 
 type Service struct {
 	store  store.IStore

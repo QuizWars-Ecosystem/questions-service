@@ -22,6 +22,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// *
+// Represents message with all existing categories is server
 type GetCategoriesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Categories    []*Category            `protobuf:"bytes,1,rep,name=categories,proto3" json:"categories,omitempty"`

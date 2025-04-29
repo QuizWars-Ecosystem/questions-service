@@ -22,10 +22,12 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// *
+// Represents request argument for creating friendship, all fields are required
 type AddFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequesterId   string                 `protobuf:"bytes,1,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"`
-	RecipientId   string                 `protobuf:"bytes,2,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"`
+	RequesterId   string                 `protobuf:"bytes,1,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"` // Requested id is id of user that is initiator of action
+	RecipientId   string                 `protobuf:"bytes,2,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"` // Recipient id is id of user that is terminator of action
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,10 +76,12 @@ func (x *AddFriendRequest) GetRecipientId() string {
 	return ""
 }
 
+// *
+// Represents request argument for make friendship active, all fields are required
 type AcceptFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RecipientId   string                 `protobuf:"bytes,1,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"`
-	RequesterId   string                 `protobuf:"bytes,2,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"`
+	RecipientId   string                 `protobuf:"bytes,1,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"` // Recipient id is id of user that got friendship request on want to act
+	RequesterId   string                 `protobuf:"bytes,2,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"` // Requester id is id of user that was a initiator of the action
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,10 +130,12 @@ func (x *AcceptFriendRequest) GetRequesterId() string {
 	return ""
 }
 
+// *
+// Represents request argument for rejecting proposed friendship, all fields are required
 type RejectFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RecipientId   string                 `protobuf:"bytes,1,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"`
-	RequesterId   string                 `protobuf:"bytes,2,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"`
+	RecipientId   string                 `protobuf:"bytes,1,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"` // Recipient id is id of user that got request on friendship but wants to reject it
+	RequesterId   string                 `protobuf:"bytes,2,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"` // Requester id is id of user that was a initiator of the action
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -178,10 +184,12 @@ func (x *RejectFriendRequest) GetRequesterId() string {
 	return ""
 }
 
+// *
+// Represents request argument for remove already existing friendship between users, all fields are required
 type RemoveFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequesterId   string                 `protobuf:"bytes,1,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"`
-	FriendId      string                 `protobuf:"bytes,2,opt,name=friend_id,json=friendId,proto3" json:"friend_id,omitempty"`
+	RequesterId   string                 `protobuf:"bytes,1,opt,name=requester_id,json=requesterId,proto3" json:"requester_id,omitempty"` // Recipient id is id of user that is initiator of removing friendship
+	FriendId      string                 `protobuf:"bytes,2,opt,name=friend_id,json=friendId,proto3" json:"friend_id,omitempty"`          // Friend id is id of user that is a friend of removing friendship initiator
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -230,9 +238,11 @@ func (x *RemoveFriendRequest) GetFriendId() string {
 	return ""
 }
 
+// *
+// Represents request argument for getting all his friends as a list
 type ListFriendsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // User id of initiator of get list friends action (self)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,6 +284,8 @@ func (x *ListFriendsRequest) GetUserId() string {
 	return ""
 }
 
+// *
+// Represents request argument for block friend. It will mark their friendship as blocked
 type BlockFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -326,6 +338,8 @@ func (x *BlockFriendRequest) GetFriendId() string {
 	return ""
 }
 
+// *
+// Represents request argument for unblock friend. It will mark their friendship as active (accepted)
 type UnblockFriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`

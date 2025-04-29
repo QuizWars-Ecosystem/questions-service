@@ -107,6 +107,30 @@ func local_request_QuestionsAdminService_CreateQuestion_0(ctx context.Context, m
 	return msg, metadata, err
 }
 
+func request_QuestionsAdminService_CreateQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq CreateQuestionOptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.CreateQuestionOption(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_QuestionsAdminService_CreateQuestionOption_0(ctx context.Context, marshaler runtime.Marshaler, server QuestionsAdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq CreateQuestionOptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.CreateQuestionOption(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 func request_QuestionsAdminService_UpdateCategory_0(ctx context.Context, marshaler runtime.Marshaler, client QuestionsAdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UpdateCategoryRequest
@@ -292,6 +316,26 @@ func RegisterQuestionsAdminServiceHandlerServer(ctx context.Context, mux *runtim
 			return
 		}
 		forward_QuestionsAdminService_CreateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_CreateQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/questionsservice.v1.QuestionsAdminService/CreateQuestionOption", runtime.WithHTTPPathPattern("/questionsservice.v1.QuestionsAdminService/CreateQuestionOption"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_QuestionsAdminService_CreateQuestionOption_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_CreateQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -484,6 +528,23 @@ func RegisterQuestionsAdminServiceHandlerClient(ctx context.Context, mux *runtim
 		}
 		forward_QuestionsAdminService_CreateQuestion_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_CreateQuestionOption_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/questionsservice.v1.QuestionsAdminService/CreateQuestionOption", runtime.WithHTTPPathPattern("/questionsservice.v1.QuestionsAdminService/CreateQuestionOption"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_QuestionsAdminService_CreateQuestionOption_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_QuestionsAdminService_CreateQuestionOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_QuestionsAdminService_UpdateCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -576,6 +637,7 @@ var (
 	pattern_QuestionsAdminService_GetFilteredQuestions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "GetFilteredQuestions"}, ""))
 	pattern_QuestionsAdminService_CreateCategory_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "CreateCategory"}, ""))
 	pattern_QuestionsAdminService_CreateQuestion_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "CreateQuestion"}, ""))
+	pattern_QuestionsAdminService_CreateQuestionOption_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "CreateQuestionOption"}, ""))
 	pattern_QuestionsAdminService_UpdateCategory_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "UpdateCategory"}, ""))
 	pattern_QuestionsAdminService_UpdateQuestion_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "UpdateQuestion"}, ""))
 	pattern_QuestionsAdminService_UpdateQuestionOption_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"questionsservice.v1.QuestionsAdminService", "UpdateQuestionOption"}, ""))
@@ -587,6 +649,7 @@ var (
 	forward_QuestionsAdminService_GetFilteredQuestions_0 = runtime.ForwardResponseMessage
 	forward_QuestionsAdminService_CreateCategory_0       = runtime.ForwardResponseMessage
 	forward_QuestionsAdminService_CreateQuestion_0       = runtime.ForwardResponseMessage
+	forward_QuestionsAdminService_CreateQuestionOption_0 = runtime.ForwardResponseMessage
 	forward_QuestionsAdminService_UpdateCategory_0       = runtime.ForwardResponseMessage
 	forward_QuestionsAdminService_UpdateQuestion_0       = runtime.ForwardResponseMessage
 	forward_QuestionsAdminService_UpdateQuestionOption_0 = runtime.ForwardResponseMessage

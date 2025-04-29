@@ -7,8 +7,8 @@ import (
 )
 
 type Category struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }
 
 type Question struct {
