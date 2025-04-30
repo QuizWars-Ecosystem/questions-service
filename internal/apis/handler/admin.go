@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 
+	"github.com/QuizWars-Ecosystem/questions-service/internal/metrics"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	apperrors "github.com/QuizWars-Ecosystem/go-common/pkg/error"
 	"github.com/QuizWars-Ecosystem/go-common/pkg/jwt"
@@ -16,6 +18,7 @@ import (
 func (h *Handler) GetFilteredQuestions(ctx context.Context, request *questionsv1.GetFilteredQuestionsRequest) (*questionsv1.GetFilteredQuestionsResponse, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("GetFilteredQuestions", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -40,6 +43,8 @@ func (h *Handler) GetFilteredQuestions(ctx context.Context, request *questionsv1
 		questionsList[i] = question
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("GetFilteredQuestions").Inc()
+
 	return &questionsv1.GetFilteredQuestionsResponse{
 		Questions: questionsList,
 		Page:      req.Offset,
@@ -53,6 +58,7 @@ func (h *Handler) GetFilteredQuestions(ctx context.Context, request *questionsv1
 func (h *Handler) CreateCategory(ctx context.Context, request *questionsv1.CreateCategoryRequest) (*questionsv1.CreateCategoryResponse, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("CreateCategory", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -60,6 +66,9 @@ func (h *Handler) CreateCategory(ctx context.Context, request *questionsv1.Creat
 	if err != nil {
 		return nil, err
 	}
+
+	metrics.AdminActionsTotalCounter.WithLabelValues("CreateCategory").Inc()
+	metrics.CategoriesTotalCounter.Inc()
 
 	return &questionsv1.CreateCategoryResponse{
 		Id: id,
@@ -69,6 +78,7 @@ func (h *Handler) CreateCategory(ctx context.Context, request *questionsv1.Creat
 func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.CreateQuestionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("CreateQuestion", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -82,12 +92,16 @@ func (h *Handler) CreateQuestion(ctx context.Context, request *questionsv1.Creat
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("CreateQuestion").Inc()
+	metrics.QuestionsTotalGauge.Inc()
+
 	return Empty, nil
 }
 
 func (h *Handler) CreateQuestionOption(ctx context.Context, request *questionsv1.CreateQuestionOptionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("CreateQuestionOption", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -106,12 +120,16 @@ func (h *Handler) CreateQuestionOption(ctx context.Context, request *questionsv1
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("CreateQuestionOption").Inc()
+	metrics.QuestionsOptionsTotalGauge.Inc()
+
 	return Empty, nil
 }
 
 func (h *Handler) UpdateCategory(ctx context.Context, request *questionsv1.UpdateCategoryRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("UpdateCategory", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -120,12 +138,15 @@ func (h *Handler) UpdateCategory(ctx context.Context, request *questionsv1.Updat
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("UpdateCategory").Inc()
+
 	return Empty, nil
 }
 
 func (h *Handler) UpdateQuestion(ctx context.Context, request *questionsv1.UpdateQuestionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("UpdateQuestion", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -144,12 +165,15 @@ func (h *Handler) UpdateQuestion(ctx context.Context, request *questionsv1.Updat
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("UpdateQuestion").Inc()
+
 	return Empty, nil
 }
 
 func (h *Handler) UpdateQuestionOption(ctx context.Context, request *questionsv1.UpdateQuestionOptionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("UpdateQuestionOption", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -168,12 +192,15 @@ func (h *Handler) UpdateQuestionOption(ctx context.Context, request *questionsv1
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("UpdateQuestionOption").Inc()
+
 	return Empty, nil
 }
 
 func (h *Handler) DeleteQuestion(ctx context.Context, request *questionsv1.DeleteQuestionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("DeleteQuestion", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -187,12 +214,16 @@ func (h *Handler) DeleteQuestion(ctx context.Context, request *questionsv1.Delet
 		return nil, err
 	}
 
+	metrics.AdminActionsTotalCounter.WithLabelValues("DeleteQuestion").Inc()
+	metrics.QuestionsTotalGauge.Dec()
+
 	return Empty, nil
 }
 
 func (h *Handler) DeleteQuestionOption(ctx context.Context, request *questionsv1.DeleteQuestionOptionRequest) (*emptypb.Empty, error) {
 	err := h.auth.ValidateRoleWithContext(ctx, string(jwt.Admin))
 	if err != nil {
+		metrics.AdminForbittenActionsTotalCounter.WithLabelValues("DeleteQuestionOption", err.Error()).Inc()
 		return nil, err
 	}
 
@@ -205,6 +236,9 @@ func (h *Handler) DeleteQuestionOption(ctx context.Context, request *questionsv1
 	if err != nil {
 		return nil, err
 	}
+
+	metrics.AdminActionsTotalCounter.WithLabelValues("DeleteQuestionOption").Inc()
+	metrics.QuestionsOptionsTotalGauge.Dec()
 
 	return Empty, nil
 }

@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 
+	"github.com/QuizWars-Ecosystem/questions-service/internal/metrics"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/models/filter"
@@ -31,6 +33,8 @@ func (h *Handler) GetQuestions(ctx context.Context, request *questionsv1.GetQues
 		questionsList[i] = q
 	}
 
+	metrics.QuestionsRequestsGauge.Set(float64(len(questionsList)))
+
 	return &questionsv1.QuestionsResponse{
 		Questions: questionsList,
 	}, nil
@@ -56,6 +60,8 @@ func (h *Handler) GetQuestionBatch(ctx context.Context, request *questionsv1.Get
 
 		questionsList[i] = q
 	}
+
+	metrics.QuestionsRequestsGauge.Set(float64(len(questionsList)))
 
 	return &questionsv1.QuestionsResponse{
 		Questions: questionsList,
