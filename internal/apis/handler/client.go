@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-
 	questionsv1 "github.com/QuizWars-Ecosystem/questions-service/gen/external/questions/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
