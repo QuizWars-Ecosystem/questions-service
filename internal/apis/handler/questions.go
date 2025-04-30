@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/QuizWars-Ecosystem/questions-service/internal/metrics"
 
 	"github.com/QuizWars-Ecosystem/go-common/pkg/abstractions"

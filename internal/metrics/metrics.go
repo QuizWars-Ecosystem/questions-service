@@ -20,13 +20,11 @@ var (
 	)
 )
 
-var (
-	CategoriesTotalCounter = prometheus.NewCounter(
-		prometheus.CounterOpts{
-			Name: "categories_total",
-			Help: "Number of categories",
-		},
-	)
+var CategoriesTotalCounter = prometheus.NewCounter(
+	prometheus.CounterOpts{
+		Name: "categories_total",
+		Help: "Number of categories",
+	},
 )
 
 var (

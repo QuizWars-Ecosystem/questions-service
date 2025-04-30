@@ -4,6 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/http"
+	"time"
+
 	"github.com/QuizWars-Ecosystem/go-common/pkg/grpcx/telemetry"
 	"github.com/QuizWars-Ecosystem/questions-service/internal/metrics"
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -11,9 +15,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/sync/errgroup"
-	"net"
-	"net/http"
-	"time"
 
 	grpccommon "github.com/QuizWars-Ecosystem/go-common/pkg/grpcx/metrics"
 	"google.golang.org/grpc/reflection"
